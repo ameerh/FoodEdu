@@ -57,9 +57,11 @@ module.exports = function(pb) {
     };
 
     BlogViewController.prototype.render = function(cb) {
+        console.log("In blog!");
         var self    = this;
 
         this.getContent(function(err, articles) {
+            console.log(articles)
             if (util.isError(err)) {
                 return cb(err);
             }

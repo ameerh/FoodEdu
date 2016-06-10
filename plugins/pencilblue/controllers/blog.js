@@ -1,3 +1,102 @@
+///*
+// Copyright (C) 2015  PencilBlue, LLC
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// */
+//
+//module.exports = function(pb) {
+//
+//    //pb dependencies
+//    var util = pb.util;
+//
+//    /**
+//     * Loads a section
+//     */
+//    function BlogViewController(){}
+//    util.inherits(BlogViewController, pb.BaseController);
+//
+//
+//    BlogViewController.prototype.init = function(context, cb) {
+//        var self = this;
+//        var init = function(err) {
+//
+//            //get content settings
+//            var contentService = new pb.ContentService({site: this.site});
+//            contentService.getSettings(function(err, contentSettings) {
+//                if (util.isError(err)) {
+//                    return cb(err);
+//                }
+//
+//                //create the service
+//                self.contentSettings = contentSettings;
+//                var asContext = self.getServiceContext();
+//                asContext.contentSettings = contentSettings;
+//                self.service = new pb.ArticleServiceV2(asContext);
+//
+//                //create the loader context
+//                var cvlContext             = self.getServiceContext();
+//                cvlContext.contentSettings = contentSettings;
+//                cvlContext.service         = self.service;
+//                self.contentViewLoader     = new pb.ContentViewLoader(cvlContext);
+//
+//                cb(null, true);
+//            });
+//        };
+//        BlogViewController.super_.prototype.init.apply(this, [context, init]);
+//    };
+//
+//    BlogViewController.prototype.render = function(cb) {
+//        var self    = this;
+//
+//        this.getContent(function(err, articles) {
+//            if (util.isError(err)) {
+//                return cb(err);
+//            }
+//
+//            //render
+//            var options = {
+//                useDefaultTemplate: true
+//            };
+//            self.contentViewLoader.render(articles, options, function(err, html) {
+//                if (util.isError(err)) {
+//                    return cb(err);
+//                }
+//
+//                var result = {
+//                    content: html
+//                };
+//                cb(result);
+//            });
+//        });
+//    };
+//
+//    BlogViewController.prototype.getContent = function(cb) {
+//        var self = this;
+//
+//        var opts = {
+//            render: true,
+//            limit: self.contentSettings.articles_per_page || 5,
+//            order: [{'publish_date': pb.DAO.DESC}, {'created': pb.DAO.DESC}]
+//        };
+//        self.service.getPublished(opts, cb);
+//    };
+//
+//    //exports
+//    return BlogViewController;
+//};
+
+
 /*
  Copyright (C) 2015  PencilBlue, LLC
 
@@ -21,56 +120,62 @@ module.exports = function(pb) {
     var util = pb.util;
 
     /**
-     * Loads a section
+     * Loads a single article
+     * @class ArticleViewController
+     * @constructor
+     * @extends BaseController
      */
-    function BlogViewController(){}
-    util.inherits(BlogViewController, pb.BaseController);
+    function PageViewController(){}
+    util.inherits(PageViewController, pb.BaseController);
 
-
-    BlogViewController.prototype.init = function(context, cb) {
+    /**
+     * @method init
+     * @param {Object} content
+     * @param {Function} cb
+     */
+    PageViewController.prototype.init = function(context, cb) {
         var self = this;
         var init = function(err) {
-
-            //get content settings
-            var contentService = new pb.ContentService({site: this.site});
-            contentService.getSettings(function(err, contentSettings) {
-                if (util.isError(err)) {
-                    return cb(err);
-                }
-
-                //create the service
-                self.contentSettings = contentSettings;
-                var asContext = self.getServiceContext();
-                asContext.contentSettings = contentSettings;
-                self.service = new pb.ArticleServiceV2(asContext);
-
-                //create the loader context
-                var cvlContext             = self.getServiceContext();
-                cvlContext.contentSettings = contentSettings;
-                cvlContext.service         = self.service;
-                self.contentViewLoader     = new pb.ContentViewLoader(cvlContext);
-
-                cb(null, true);
-            });
-        };
-        BlogViewController.super_.prototype.init.apply(this, [context, init]);
-    };
-
-    BlogViewController.prototype.render = function(cb) {
-        console.log("In blog!");
-        var self    = this;
-
-        this.getContent(function(err, articles) {
-            console.log(articles)
             if (util.isError(err)) {
                 return cb(err);
             }
 
-            //render
-            var options = {
-                useDefaultTemplate: true
-            };
-            self.contentViewLoader.render(articles, options, function(err, html) {
+            //create the service
+            self.service = new pb.PageService(self.getServiceContext());
+
+            //create the loader context
+            var context     = self.getServiceContext();
+            context.service = self.service;
+            self.contentViewLoader = new pb.ContentViewLoader(context);
+
+            cb(null, true);
+        };
+        PageViewController.super_.prototype.init.apply(this, [context, init]);
+    };
+
+    /**
+     * @method render
+     * @param {Function} cb
+     */
+    PageViewController.prototype.render = function(cb) {
+        var self    = this;
+        var custUrl = 'home';
+
+        //attempt to load object
+        var opts = {
+            render: true,
+            where: this.getWhereClause(custUrl)
+        };
+        this.service.getSingle(opts, function(err, content) {
+            if (util.isError(err)) {
+                return cb(err);
+            }
+            else if (content == null) {
+                return self.reqHandler.serve404();
+            }
+
+            var options = {};
+            self.contentViewLoader.render([content], options, function(err, html) {
                 if (util.isError(err)) {
                     return cb(err);
                 }
@@ -83,17 +188,43 @@ module.exports = function(pb) {
         });
     };
 
-    BlogViewController.prototype.getContent = function(cb) {
-        var self = this;
+    /**
+     * Builds out the where clause for finding the article to render.  Because
+     * MongoDB has an object ID represented by 12 characters we must account
+     * for this condition by building a where clause with an "or" condition.
+     * Otherwise we will only query on the url key
+     * @method getWhereClause
+     * @param {String} custUrl Represents the article's ID or its slug
+     * @return {Object} An object representing the where clause to use in the
+     * query to locate the article
+     */
+    PageViewController.prototype.getWhereClause = function(custUrl) {
 
-        var opts = {
-            render: true,
-            limit: self.contentSettings.articles_per_page || 5,
-            order: [{'publish_date': pb.DAO.DESC}, {'created': pb.DAO.DESC}]
-        };
-        self.service.getPublished(opts, cb);
+        //put a check to look up by ID *FIRST*
+        var conditions = [];
+        if(pb.validation.isIdStr(custUrl, true)) {
+            conditions.push(pb.DAO.getIdWhere(custUrl));
+        }
+
+        //put a check to look up by URL
+        conditions.push({
+            url: custUrl
+        });
+
+        //check for object ID as the custom URL
+        var where;
+        if (conditions.length > 1) {
+            where = {
+                $or: conditions
+            };
+        }
+        else {
+            where = conditions[0];
+        }
+        return where;
     };
 
     //exports
-    return BlogViewController;
+    return PageViewController;
 };
+

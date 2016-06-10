@@ -241,7 +241,7 @@ module.exports = function Routes(pb){
         },
         {
             method: 'get',
-            path: "/foot-and-ankle/:customUrl",
+            path: "/p/:customUrl",
             auth_required: false,
             controller: path.join(pb.config.docRoot, 'plugins', 'pencilblue', 'controllers', 'page.js'),
             content_type: 'text/html',

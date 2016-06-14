@@ -1415,7 +1415,7 @@ module.exports = function RequestHandlerModule(pb) {
      * @param {String} location
      */
     RequestHandler.prototype.doRedirect = function(location, statusCode) {
-        this.resp.statusCode = statusCode || pb.HttpStatus.MOVED_TEMPORARILY;
+        this.resp.statusCode = statusCode || pb.HttpStatus.MOVED_PERMANENTLY;
         this.resp.setHeader("Location", location);
         this.resp.end();
     };

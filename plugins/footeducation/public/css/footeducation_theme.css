@@ -291,9 +291,9 @@ footer {
 }
 .footeducation-menu
 {
-    height: 80px;
-    min-height: 80px;
-    max-height: 80px;
+    height: inherit;
+    min-height: 100px;
+    max-height: inherit;
 }
 .footeducation-body
 {

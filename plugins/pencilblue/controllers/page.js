@@ -38,6 +38,7 @@ module.exports = function(pb) {
         var self = this;
         var init = function(err) {
             if (util.isError(err)) {
+                console.log('here')
                 return cb(err);
             }
 
@@ -59,16 +60,17 @@ module.exports = function(pb) {
      * @param {Function} cb
      */
     PageViewController.prototype.render = function(cb) {
+
         var self    = this;
         var custUrl = this.pathVars.customUrl;
 
-        console.log(custUrl)
 
         //attempt to load object
         var opts = {
             render: true,
             where: this.getWhereClause(custUrl)
         };
+        console.log(opts)
         this.service.getSingle(opts, function(err, content) {
             if (util.isError(err)) {
                 return cb(err);
@@ -102,6 +104,7 @@ module.exports = function(pb) {
      * query to locate the article
      */
     PageViewController.prototype.getWhereClause = function(custUrl) {
+
 
         //put a check to look up by ID *FIRST*
         var conditions = [];

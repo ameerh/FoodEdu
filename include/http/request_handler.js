@@ -37,6 +37,8 @@ module.exports = function RequestHandlerModule(pb) {
      * @param {Response} resp The outgoing response
      */
     function RequestHandler(server, req, resp){
+
+
         this.startTime = (new Date()).getTime();
         this.server    = server;
         this.req       = req;
@@ -714,6 +716,7 @@ module.exports = function RequestHandlerModule(pb) {
 
         getActiveTheme(function(error, activeTheme) {
 
+
             //build out params for handlers
             var params = {
                 mime: self.themeRoute && self.themeRoute.content_type ? self.themeRoute.content_type : 'text/html',
@@ -784,10 +787,23 @@ module.exports = function RequestHandlerModule(pb) {
 
         this.site = this.siteObj.uid;
         this.siteName = this.siteObj.displayName;
+
+
         //find the controller to hand off to
         var route = this.getRoute(this.url.pathname);
         if (route == null) {
-            return this.serve404();
+            console.log(this.url.pathname)
+            var split_url = this.url.pathname.split('/');
+            if(split_url.length > 3)
+            {
+                 //redirect on new url using 301 redirect.
+                var new_url = '/p/'+split_url[split_url.length-1];
+                return this.doRedirect(new_url , 301);
+            }
+            else
+            {
+                return this.serve404();
+            }
         }
         this.route = route;
 
@@ -812,7 +828,6 @@ module.exports = function RequestHandlerModule(pb) {
      * @return {Object} The route object or NULL if the path does not match any route
      */
     RequestHandler.prototype.getRoute = function(path) {
-
         //check static routes first.  It must be an exact match including
         //casing and any ending slash.
         var isSilly = pb.log.isSilly();

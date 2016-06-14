@@ -35,6 +35,7 @@ module.exports = function PB(config) {
 
     //setup utils
     pb.util    = require(path.join(config.docRoot, '/include/util.js'));
+
     Object.defineProperty(pb, 'utils', {
         get: function() {
             pb.log.warn('PencilBlue: pb.utils is deprecated.  Use pb.util instead');

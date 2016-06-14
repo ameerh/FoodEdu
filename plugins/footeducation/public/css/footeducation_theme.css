@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Open Sans", sans-serif;
 }
 
 *
@@ -349,7 +349,7 @@ footer {
 
 .add-sense
 {
-    background-color: #fff;
+    /*background-color: #fff;*/
 }
 .row
 {
@@ -388,3 +388,31 @@ footer {
 {
     color: #1e73be;;
 }
+
+/*// side card with more detail*/
+
+.more-detail-card
+{
+    background-color: #fff;
+    min-height: 300px;
+    height: 300px;
+    max-height: 300px;
+}
+.more-detail-content
+{
+    padding-left: 4em;
+}
+.set-more-link-heading
+{
+    margin-top: 1.5em !important;
+}
+.meet-editors-button
+{
+    color: #fff;
+    background-color: #666666;
+    border-color: #666666;
+    border-width: 0px !important;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+

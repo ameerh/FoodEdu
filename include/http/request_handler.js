@@ -1,19 +1,19 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+ Copyright (C) 2015  PencilBlue, LLC
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 //dependencies
 var url     = require('url');
@@ -162,13 +162,13 @@ module.exports = function RequestHandlerModule(pb) {
      */
     RequestHandler.loadSite = function(site) {
         RequestHandler.sites[site.hostname] = {
-          active: site.active,
-          uid: site.uid,
-          displayName: site.displayName,
-          hostname: site.hostname,
-          defaultLocale: site.defaultLocale,
-          supportedLocales: site.supportedLocales,
-          prevHostnames: site.prevHostnames
+            active: site.active,
+            uid: site.uid,
+            displayName: site.displayName,
+            hostname: site.hostname,
+            defaultLocale: site.defaultLocale,
+            supportedLocales: site.supportedLocales,
+            prevHostnames: site.prevHostnames
         };
         //Populate RequestHandler.redirectHosts if this site has prevHostnames associated
         if (site.prevHostnames) {
@@ -425,8 +425,8 @@ module.exports = function RequestHandlerModule(pb) {
         routeDescriptor.themes[site][theme][descriptor.method]            = descriptor;
         routeDescriptor.themes[site][theme][descriptor.method].controller = Controller;
 
-       //only add the descriptor it is new.  We do it here because we need to
-       //know that the controller is good.
+        //only add the descriptor it is new.  We do it here because we need to
+        //know that the controller is good.
         if (isNew) {
             //set them in storage
             if (isStatic) {
@@ -755,6 +755,9 @@ module.exports = function RequestHandlerModule(pb) {
      * @param {Error} err Any error that occurred while retrieving the session
      * @param {Object} session The session for the requesting entity
      */
+
+    // count to restrict to check only url prefix
+    var count = 0;
     RequestHandler.prototype.onSessionRetrieved = function(err, session) {
         if (err) {
             this.onErrorOccurred(err);
@@ -789,16 +792,47 @@ module.exports = function RequestHandlerModule(pb) {
         this.siteName = this.siteObj.displayName;
 
 
+        console.log(count)
+        console.log(this.url.pathname)
+
+        // check for prefix 'p'
+        var verify_prefix = this.url.pathname.split('/');
+        if(count < 1)
+        {
+            console.log('count checker')
+            if(verify_prefix[1] != 'p')
+            {
+                console.log('verify checker')
+                count ++;
+                return this.doRedirect('/p'+this.url.pathname , 301);
+            }
+            count ++;
+        }
+
         //find the controller to hand off to
         var route = this.getRoute(this.url.pathname);
+
+        console.log(route)
         if (route == null) {
-            console.log(this.url.pathname)
             var split_url = this.url.pathname.split('/');
+            if(split_url[1] != 'p')
+            {
+                return this.doRedirect('/p'+  this.url.pathname , 301);
+            }
             if(split_url.length > 3)
             {
-                 //redirect on new url using 301 redirect.
-                var new_url = '/p/'+split_url[split_url.length-1];
-                return this.doRedirect(new_url , 301);
+                //redirect on new url using 301 redirect.
+                if(split_url[split_url.length-1] != '')
+                {
+                    var new_url = '/p/'+split_url[split_url.length-1];
+                    return this.doRedirect(new_url , 301);
+                }
+                else
+                {
+                    var new_url = '/p/'+split_url[split_url.length-2];
+                    return this.doRedirect(new_url , 301);
+                }
+
             }
             else
             {
@@ -1205,9 +1239,9 @@ module.exports = function RequestHandlerModule(pb) {
         //calculate response time
         if (pb.log.isDebug()) {
             pb.log.debug("Response Time: "+(new Date().getTime() - this.startTime)+
-                    "ms URL=["+this.req.method+']'+
-                    this.req.url+(doRedirect ? ' Redirect='+data.redirect : '') +
-                    (data.code == undefined ? '' : ' CODE='+data.code));
+                "ms URL=["+this.req.method+']'+
+                this.req.url+(doRedirect ? ' Redirect='+data.redirect : '') +
+                (data.code == undefined ? '' : ' CODE='+data.code));
         }
 
         //close session after data sent

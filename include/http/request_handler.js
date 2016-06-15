@@ -791,20 +791,20 @@ module.exports = function RequestHandlerModule(pb) {
         this.site = this.siteObj.uid;
         this.siteName = this.siteObj.displayName;
 
-
-        console.log(count)
         console.log(this.url.pathname)
-
         // check for prefix 'p'
         var verify_prefix = this.url.pathname.split('/');
+
+        console.log(count)
         if(count < 1)
         {
-            console.log('count checker')
-            if(verify_prefix[1] != 'p')
-            {
-                console.log('verify checker')
-                count ++;
-                return this.doRedirect('/p'+this.url.pathname , 301);
+            console.log('here in count')
+            console.log(count)
+            if(this.url.pathname != '/') {
+                    if(verify_prefix[1] != 'p' ) {
+                    count ++;
+                    return this.doRedirect('/p'+this.url.pathname , 301);
+                }
             }
             count ++;
         }
@@ -812,8 +812,8 @@ module.exports = function RequestHandlerModule(pb) {
         //find the controller to hand off to
         var route = this.getRoute(this.url.pathname);
 
-        console.log(route)
         if (route == null) {
+            console.log('route if')
             var split_url = this.url.pathname.split('/');
             if(split_url[1] != 'p')
             {
@@ -832,7 +832,6 @@ module.exports = function RequestHandlerModule(pb) {
                     var new_url = '/p/'+split_url[split_url.length-2];
                     return this.doRedirect(new_url , 301);
                 }
-
             }
             else
             {

@@ -225,8 +225,12 @@ footer {
 }
 
 
-
-
+/*// Logo responsiveness */
+@media (max-width: 400px) {
+    .footeducation-logo {
+        width: 130px !important;
+    }
+}
 
 
 
@@ -312,7 +316,8 @@ footer {
 }
 .footeducation-logo
 {
-   margin-top: 25px;margin-bottom: 25px;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 .footeducation-menu-setting
 {

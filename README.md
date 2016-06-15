@@ -49,7 +49,7 @@ The instructions below assume that Node.js [0.11, 5) and MongoDB [2, 3) are inst
  OR
 
  # production
- sudo forever start pencilblue.js
+ sudo forever start footeducation.js
  ```
  7. Navigate to the site root you specified in a configuration file or http://localhost:8080 by default.
 

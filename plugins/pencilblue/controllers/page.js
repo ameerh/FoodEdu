@@ -38,7 +38,6 @@ module.exports = function(pb) {
         var self = this;
         var init = function(err) {
             if (util.isError(err)) {
-                console.log('here')
                 return cb(err);
             }
 
@@ -70,7 +69,6 @@ module.exports = function(pb) {
             render: true,
             where: this.getWhereClause(custUrl)
         };
-        console.log(opts)
         this.service.getSingle(opts, function(err, content) {
             if (util.isError(err)) {
                 return cb(err);

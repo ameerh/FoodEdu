@@ -796,20 +796,28 @@ module.exports = function RequestHandlerModule(pb) {
         // As is pencilblue every file related to page also render dynamically
         // We have to check if last index of url  contain . extension or not.
         // if not caontain then that means it url and we can append prefix 'p'
+        // if the last index of array that split on the behalf of dot contain script then its means its come from admin
 
-
-        var verify_prefix = this.url.pathname.split('/');
-
-        if(this.url.pathname != '/') {
-            var check_dot_extension = verify_prefix[verify_prefix.length-1].split('.');
-            console.log(check_dot_extension.length)
-            if(check_dot_extension.length == 1) {
-                if(verify_prefix[1] != 'p')
-                {
-                    return this.doRedirect('/p'+this.url.pathname , 301);
-                }
-            }
-        }
+        //console.log(this.url.pathname)
+        //
+        //var verify_prefix = this.url.pathname.split('/');
+        //
+        //if(this.url.pathname != '/') {
+        //    console.log(verify_prefix)
+        //    if(verify_prefix[1] != 'admin')
+        //    {
+        //        console.log('here')
+        //        var check_dot_extension = verify_prefix[verify_prefix.length-1].split('.');
+        //        console.log(check_dot_extension[0])
+        //        if(check_dot_extension.length == 1 && check_dot_extension[0] != 'script' && check_dot_extension[0] != 'pages' && check_dot_extension[0] != 'topics' &&
+        //            check_dot_extension[0] != 'articles' && check_dot_extension[0] != 'get_preview' && check_dot_extension[0] != 'logout') {
+        //            if(verify_prefix[1] != 'p')
+        //            {
+        //                return this.doRedirect('/p'+this.url.pathname , 301);
+        //            }
+        //        }
+        //    }
+        //}
 
 
         //find the controller to hand off to

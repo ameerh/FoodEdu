@@ -11,8 +11,6 @@ out
 plugins/*
 !plugins/pencilblue
 !plugins/pencilblue/**
-!plugins/footeducation
-!plugins/footeducation/**
 !plugins/ga
 !plugins/ga/**
 !plugins/portfolio

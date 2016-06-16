@@ -27,6 +27,4 @@ config.json
 **/.DS_Store
 **/dump.rdb
 
-config.js
-
 npm-debug.log

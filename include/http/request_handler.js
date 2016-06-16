@@ -798,7 +798,7 @@ module.exports = function RequestHandlerModule(pb) {
         // if not caontain then that means it url and we can append prefix 'p'
         // if the last index of array that split on the behalf of dot contain script then its means its come from admin
 
-        //console.log(this.url.pathname)
+        console.log(this.url.pathname)
         //
         //var verify_prefix = this.url.pathname.split('/');
         //

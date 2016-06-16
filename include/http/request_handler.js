@@ -756,8 +756,7 @@ module.exports = function RequestHandlerModule(pb) {
      * @param {Object} session The session for the requesting entity
      */
 
-    // count to restrict to check only url prefix
-    var count = 0;
+
     RequestHandler.prototype.onSessionRetrieved = function(err, session) {
         if (err) {
             this.onErrorOccurred(err);
@@ -791,24 +790,38 @@ module.exports = function RequestHandlerModule(pb) {
         this.site = this.siteObj.uid;
         this.siteName = this.siteObj.displayName;
 
-        // check for prefix 'p'
+
+        // check weather the prefix 'p' is attached with url or not
+        // if prefix 'p' is not exist in url then dynamically append it with url
+        // As is pencilblue every file related to page also render dynamically
+        // We have to check if last index of url  contain . extension or not.
+        // if not caontain then that means it url and we can append prefix 'p'
+
+
         var verify_prefix = this.url.pathname.split('/');
 
-        if(count < 1)
-        {
-            if(this.url.pathname != '/') {
-                    if(verify_prefix[1] != 'p' ) {
-                    count ++;
+        if(this.url.pathname != '/') {
+            var check_dot_extension = verify_prefix[verify_prefix.length-1].split('.');
+            console.log(check_dot_extension.length)
+            if(check_dot_extension.length == 1) {
+                if(verify_prefix[1] != 'p')
+                {
                     return this.doRedirect('/p'+this.url.pathname , 301);
                 }
             }
-            count ++;
         }
+
 
         //find the controller to hand off to
         var route = this.getRoute(this.url.pathname);
 
         if (route == null) {
+
+            // when there is heirarchy structure in url the its didn't get route and return nul
+            // First step we will check weather prefix 'p' is along with url or not
+            // if prefix 'p' exist then we will simply catch last slug, append it with url and 301 redirect.
+            // but if prefix 'p' is not attached then we will add prefix as welll.
+
             var split_url = this.url.pathname.split('/');
             if(split_url[1] != 'p')
             {

@@ -11,7 +11,7 @@
 
 module.exports = {
     "siteName": "footeducation",
-    "siteRoot": "http://ec2-52-38-184-71.us-west-2.compute.amazonaws.com:8080",
+    "siteRoot": "http://52.38.184.71:8080",
     "sitePort": 8080,
     "logging": {
         "level": "info"
@@ -61,8 +61,8 @@ module.exports = {
     },
     "multisite": {
         "enabled": false,
-        "globalRoot": "http://global.ec2-52-38-184-71.us-west-2.compute.amazonaws.com:8080"
+        "globalRoot": "http://global.localhost:8080"
     },
-    "siteIP": "127.0.0.1"
+    "siteIP": "0.0.0.0"
 };
 

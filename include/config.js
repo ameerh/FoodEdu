@@ -105,14 +105,14 @@ Configuration.getBaseConfig = function(multisite) {
     return {
 
         //The name of the site.
-        siteName: 'footEducation',
+        siteName: 'pencilblue',
 
         //The root of the site.  This host part should ALWAYS match the value of
         //the siteIP
-        siteRoot: 'http://ec2-52-38-184-71.us-west-2.compute.amazonaws.com:8080',
+        siteRoot: 'http://localhost:8080',
 
         //The hostname or IP address that the web server instance will bind to
-        siteIP:   '2.52.38.184.71',
+        siteIP:   '0.0.0.0',
 
         //The primary port to listen for traffic on.  Some environment such as
         //heroku force you to use whatever port they have available.  In such cases
@@ -128,7 +128,7 @@ Configuration.getBaseConfig = function(multisite) {
 
             // When multisite.enabled is true, this is the hostname that will resolve to the global namespace.
             // Only Admin routes will be activated for this hostname.
-            globalRoot: 'http://global.ec2-52-38-184-71.us-west-2.compute.amazonaws.com:8080'
+            globalRoot: 'http://global.localhost:8080'
         },
 
         //provides a configuration for connecting to persistent storage.  The
@@ -140,7 +140,7 @@ Configuration.getBaseConfig = function(multisite) {
             ],
 
             //the name of the default DB for the system
-            name: 'footEducation',
+            name: 'pencil_blue',
 
             options: {
 

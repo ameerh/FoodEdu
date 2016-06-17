@@ -11,8 +11,8 @@
 
 module.exports = {
     "siteName": "footeducation",
-    "siteRoot": "http://localhost:4005",
-    "sitePort": 4005,
+    "siteRoot": "http://localhost:8005",
+    "sitePort": 8005,
     "logging": {
         "level": "info"
     },
@@ -61,7 +61,7 @@ module.exports = {
     },
     "multisite": {
         "enabled": false,
-        "globalRoot": "http://global.localhost:4005"
+        "globalRoot": "http://global.localhost:8005"
     },
     "siteIP": "127.0.0.1"
 };

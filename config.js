@@ -21,8 +21,8 @@ module.exports = {
         "type": "mongo",
         "servers": [
             //LOCAL
-            //"mongodb://127.0.0.1:27017/"
-            "mongodb: http://52.38.184.71/footeducation"
+            "mongodb://127.0.0.1:27017/"
+            //"mongodb: http://52.38.184.71/footeducation"
             //"mongodb://daniel.geri:gobears2016@ds015924.mlab.com:15924/footeducation"
         ],
         "name": "footeducation",

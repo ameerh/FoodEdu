@@ -11,7 +11,8 @@
 
 module.exports = {
     "siteName": "footeducation",
-    "siteRoot": "http://52.38.184.71:8080",
+    //"siteRoot": "http://52.38.184.71:8080",
+    "siteRoot": "http://localhost:8080",
     "sitePort": 8080,
     "logging": {
         "level": "info"
@@ -21,7 +22,8 @@ module.exports = {
         "servers": [
             //LOCAL
             //"mongodb://127.0.0.1:27017/"
-            "mongodb://daniel.geri:gobears2016@ds015924.mlab.com:15924/footeducation"
+            "mongodb: http://52.38.184.71/footeducation"
+            //"mongodb://daniel.geri:gobears2016@ds015924.mlab.com:15924/footeducation"
         ],
         "name": "footeducation",
         "writeConcern": 1

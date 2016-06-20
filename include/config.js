@@ -105,7 +105,7 @@ Configuration.getBaseConfig = function(multisite) {
     return {
 
         //The name of the site.
-        siteName: 'pencilblue',
+        siteName: 'footEducation',
 
         //The root of the site.  This host part should ALWAYS match the value of
         //the siteIP

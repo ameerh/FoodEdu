@@ -1,0 +1,37 @@
+{
+    "uid": "adsense_footeducation",
+    "name": "Google Adsense Plugin",
+    "description": "Adds directives for Google Adsense ads.",
+    "version": "0.2.0",
+    "pb_version": "0.5.x",
+    "author": {
+        "name": "FootEducation",
+        "email": "yasir.rafiq@novatoresols.com",
+        "website": "http://footeducation.com",
+        "contributors": [
+            {
+                "name": "Yasir Rafiq",
+                "email": ""
+            },
+            {
+                "name": "Talha Awan",
+                "email": ""
+            }
+        ]
+    },
+    "settings": [
+        {
+            "name": "ad_client_id",
+            "value": ""
+        }
+    ],
+    "permissions": {
+        "ACCESS_USER": [],
+        "ACCESS_WRITER": [],
+        "ACCESS_EDITOR": [],
+        "ACCESS_MANAGING_EDITOR": []
+    },
+    "main_module": {
+        "path": "adsense.js"
+    }
+}

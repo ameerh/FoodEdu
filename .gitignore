@@ -13,6 +13,8 @@ plugins/*
 !plugins/pencilblue/**
 !plugins/footeducation
 !plugins/footeducation/**
+!plugins/adsense_footeducation
+!plugins/adsense_footeducation/**
 !plugins/ga
 !plugins/ga/**
 !plugins/portfolio

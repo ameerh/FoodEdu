@@ -831,10 +831,14 @@ module.exports = function RequestHandlerModule(pb) {
             // but if prefix 'p' is not attached then we will add prefix as welll.
 
             var split_url = this.url.pathname.split('/');
+
+            // if prefix 'p' not exist
             if(split_url[1] != 'p')
             {
                 return this.doRedirect('/p'+  this.url.pathname , 301);
             }
+
+            // check if hirarchy exist or not
             if(split_url.length > 3)
             {
                 //redirect on new url using 301 redirect.

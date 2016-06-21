@@ -421,3 +421,8 @@ footer {
     padding-right: 1em;
 }
 
+/*// set navigation bar*/
+.navbar-collapse
+{
+    padding-left: 0px !important;
+}

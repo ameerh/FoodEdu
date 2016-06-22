@@ -1,3 +1,4 @@
+
 /*foot pain identifier start*/
 #foot-pain-identifier {
     width:680px;
@@ -36,7 +37,7 @@
 }
 
 a#dorsal-button {
-    background-image:url('/public/footeducation/img/fpi-dorsal.png');
+    background-image:url('/public/footeducation/img/fpi-buttons.png');
     background-position:0 0;
     background-repeat:no-repeat;
     width:104px;
@@ -49,7 +50,7 @@ a:hover#dorsal-button {
 }
 
 a#plantar-button {
-    background-image:url('/public/footeducation/img/fpi-plantar.png');
+    background-image:url('/public/footeducation/img/fpi-buttons.png');
     background-position:-104px 0;
     background-repeat:no-repeat;
     width:104px;
@@ -62,7 +63,7 @@ a:hover#plantar-button {
 }
 
 a#lateral-button {
-    background-image:url('/public/footeducation/img/fpi-lateral.png');
+    background-image:url('/public/footeducation/img/fpi-buttons.png');
     background-position:-208px 0;
     background-repeat:no-repeat;
     width:104px;
@@ -75,7 +76,7 @@ a:hover#lateral-button {
 }
 
 a#medial-button {
-    background-image:url('/public/footeducation/img/fpi-medial.png');
+    background-image:url('/public/footeducation/img/fpi-buttons.png');
     background-position:-312px 0;
     background-repeat:no-repeat;
     width:104px;
@@ -136,7 +137,7 @@ a:hover#medial-button {
 }
 
 a#dorsal-button-small {
-    /*background-image:url('/images/fpi/fpi-buttons-small.png');*/
+    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
     background-position:0 0;
     background-repeat:no-repeat;
     width:43px;
@@ -149,7 +150,7 @@ a:hover#dorsal-button-small {
 }
 
 a#plantar-button-small {
-    /*background-image:url('/images/fpi/fpi-buttons-small.png');*/
+    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
     background-position:-43px 0;
     background-repeat:no-repeat;
     width:43px;
@@ -162,7 +163,7 @@ a:hover#plantar-button-small {
 }
 
 a#lateral-button-small {
-    /*background-image:url('/images/fpi/fpi-buttons-small.png');*/
+    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
     background-position:-86px 0;
     background-repeat:no-repeat;
     width:43px;
@@ -175,7 +176,7 @@ a:hover#lateral-button-small {
 }
 
 a#medial-button-small {
-    /*background-image:url('/images/fpi/fpi-buttons-small.png');*/
+    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
     background-position:-129px 0;
     background-repeat:no-repeat;
     width:43px;
@@ -225,3 +226,5 @@ a:hover#medial-button-small {
     font-size:14px;
     padding-top:10px;
 }
+
+

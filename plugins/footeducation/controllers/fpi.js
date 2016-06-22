@@ -19,7 +19,7 @@
 var path  = require('path');
 var async = require('async');
 
-module.exports = function IndexModule(pb) {
+module.exports = function FpiModule(pb) {
 
     //pb dependencies
     var util           = pb.util;
@@ -28,16 +28,16 @@ module.exports = function IndexModule(pb) {
     var ArticleService = pb.ArticleService;
 
     /**
-     * Index page of the pencilblue theme
+     * Fpi page of the pencilblue theme
      * @deprecated Since 0.4.1
-     * @class Index
+     * @class Fpi
      * @constructor
      * @extends BaseController
      */
-    function Index(){}
-    util.inherits(Index, pb.BaseController);
+    function Fpi(){}
+    util.inherits(Fpi, pb.BaseController);
 
-    Index.prototype.init = function (props, cb) {
+    Fpi.prototype.init = function (props, cb) {
         var self = this;
 
         pb.BaseController.prototype.init.call(self, props, function () {
@@ -46,7 +46,7 @@ module.exports = function IndexModule(pb) {
         });
     };
 
-    Index.prototype.render = function(cb)
+    Fpi.prototype.render = function(cb)
     {
         var self = this;
 
@@ -133,7 +133,7 @@ module.exports = function IndexModule(pb) {
     };
 
 
-    Index.prototype.getTemplate = function(content, cb) {
+    Fpi.prototype.getTemplate = function(content, cb) {
 
         //check if we should just use whatever default there is.
         //this could fall back to an active theme or the default pencilblue theme.
@@ -150,7 +150,7 @@ module.exports = function IndexModule(pb) {
         var uidAndTemplate = content.template;
 
         //when no template is specified or is empty we no that the article has no
-        //preference and we can fall back on the default (index).  We depend on the
+        //preference and we can fall back on the default (Fpi).  We depend on the
         //template service to determine who has priority based on the active theme
         //then defaulting back to pencilblue.
         if (!pb.validation.validateNonEmptyStr(uidAndTemplate, true)) {
@@ -166,7 +166,7 @@ module.exports = function IndexModule(pb) {
 
         //for backward compatibility we let the template service determine where to
         //find the template when no template is specified.  This mostly catches the
-        //default case of "index"
+        //default case of "Fpi"
         if (pieces.length === 1) {
 
             pb.log.silly("ContentController: No theme specified, Template Service will delegate [%s]", pieces[0]);
@@ -196,12 +196,12 @@ module.exports = function IndexModule(pb) {
         cb(null, pieces[1]);
     };
 
-    Index.prototype.getDefaultTemplatePath = function() {
-        return 'index';
+    Fpi.prototype.getDefaultTemplatePath = function() {
+        return 'Fpi';
     };
 
 
-    Index.prototype.gatherData = function(cb) {
+    Fpi.prototype.gatherData = function(cb) {
         var self  = this;
         var tasks = {
 
@@ -230,7 +230,7 @@ module.exports = function IndexModule(pb) {
         async.parallel(tasks, cb);
     };
 
-    Index.prototype.loadContent = function(articleCallback) {
+    Fpi.prototype.loadContent = function(articleCallback) {
 
         var section = this.req.pencilblue_section || null;
         var topic   = this.req.pencilblue_topic   || null;
@@ -273,7 +273,7 @@ module.exports = function IndexModule(pb) {
         }
     };
 
-    Index.prototype.renderContent = function(content, contentSettings, themeSettings, index, cb) {
+    Fpi.prototype.renderContent = function(content, contentSettings, themeSettings, Fpi, cb) {
         var self = this;
 
         var isPage           = content.object_type === 'page';
@@ -290,7 +290,7 @@ module.exports = function IndexModule(pb) {
         ats.registerLocal('article_subheading', content.subheading ? content.subheading : '');
         ats.registerLocal('article_subheading_display', content.subheading ? '' : 'display:none;');
         ats.registerLocal('article_id', content[pb.DAO.getIdField()].toString());
-        ats.registerLocal('article_index', index);
+        ats.registerLocal('article_Fpi', Fpi);
         ats.registerLocal('article_timestamp', showTimestamp && content.timestamp ? content.timestamp : '');
         ats.registerLocal('article_timestamp_display', showTimestamp ? '' : 'display:none;');
         ats.registerLocal('article_layout', new pb.TemplateValue(content.layout, false));
@@ -313,7 +313,7 @@ module.exports = function IndexModule(pb) {
         ats.load('elements/article', cb);
     };
 
-    Index.prototype.renderComments = function(content, ts, cb) {
+    Fpi.prototype.renderComments = function(content, ts, cb) {
         var self           = this;
         var commentingUser = null;
         if(pb.security.isAuthenticated(this.session)) {
@@ -358,7 +358,7 @@ module.exports = function IndexModule(pb) {
         ts.load('elements/comments', cb);
     };
 
-    Index.prototype.renderComment = function(comment, cb) {
+    Fpi.prototype.renderComment = function(comment, cb) {
 
         var cts = this.ts.getChildInstance();
         cts.reprocess = false;
@@ -371,7 +371,7 @@ module.exports = function IndexModule(pb) {
         cts.load('elements/comments/comment', cb);
     };
 
-    Index.prototype.getContentSpecificPageName = function(content, cb) {
+    Fpi.prototype.getContentSpecificPageName = function(content, cb) {
         if (!content) {
             cb(null, pb.config.siteName);
             return;
@@ -398,7 +398,7 @@ module.exports = function IndexModule(pb) {
         }
     };
 
-    Index.prototype.getNavigation = function(cb) {
+    Fpi.prototype.getNavigation = function(cb) {
         var options = {
             currUrl: this.req.url,
             site: this.site,
@@ -410,7 +410,7 @@ module.exports = function IndexModule(pb) {
         var menuService = new pb.TopMenuService();
         menuService.getNavItems(options, function(err, navItems) {
             if (util.isError(err)) {
-                pb.log.error('Index: %s', err.stack);
+                pb.log.error('Fpi: %s', err.stack);
             }
             cb(navItems.themeSettings, navItems.navigation, navItems.accountButtons);
         });
@@ -430,11 +430,11 @@ module.exports = function IndexModule(pb) {
      *
      * @param cb A callback of the form: cb(error, array of objects)
      */
-    Index.getRoutes = function(cb) {
+    Fpi.getRoutes = function(cb) {
         var routes = [
             {
                 method: 'get',
-                path: '/he',
+                path: '/p/foot-pain-identifier',
                 auth_required: false,
                 content_type: 'text/html'
             }
@@ -443,5 +443,5 @@ module.exports = function IndexModule(pb) {
     };
 
     //exports
-    return Index;
+    return Fpi;
 };

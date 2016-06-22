@@ -1441,6 +1441,14 @@ module.exports = function Routes(pb){
             access_level: pb.SecurityService.ACCESS_WRITER,
             controller: path.join(pb.config.docRoot, 'plugins/pencilblue/controllers/api/content/page_api_controller.js'),
             request_body: ['application/json']
+        },
+        {
+            method: 'get',
+            path: "/p/foot-pain-identifier",
+            content_type: 'text/html',
+            localization:true,
+            auth_required: false,
+            controller: path.join(pb.config.docRoot, 'plugins/footeducation/controllers/fpi.js')
         }
     ];
 };

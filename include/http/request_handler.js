@@ -817,7 +817,7 @@ module.exports = function RequestHandlerModule(pb) {
                 return this.doRedirect('/p'+  this.url.pathname , 301);
             }
 
-            // check if hirarchy exist or not
+            // check if hierarchy exist or not
             if(split_url.length > 3)
             {
                 //redirect on new url using 301 redirect.
@@ -841,7 +841,6 @@ module.exports = function RequestHandlerModule(pb) {
         {
             if(route.path == ':locale')
             {
-                console.log(this.url.pathname.split('/')[1])
                 if(this.url.pathname.split('/')[1] != 'p')
                 {
                     return this.doRedirect('/p'+  this.url.pathname , 301);

@@ -1449,6 +1449,14 @@ module.exports = function Routes(pb){
             localization:true,
             auth_required: false,
             controller: path.join(pb.config.docRoot, 'plugins/footeducation/controllers/fpi.js')
+        },
+        {
+            method: 'get',
+            path: "/p/foot-pain-identifier",
+            content_type: 'text/html',
+            localization:true,
+            auth_required: false,
+            controller: path.join(pb.config.docRoot, 'plugins/footeducation/controllers/fpi.js')
         }
     ];
 };

@@ -814,7 +814,7 @@ module.exports = function RequestHandlerModule(pb) {
             // if prefix 'p' not exist
             if(split_url[1] != 'p')
             {
-                return this.doRedirect('/p'+  this.url.pathname , 301);
+                return this.doRedirect('/p/'+  split_url[split_url.length-1] , 301);
             }
 
             // check if hierarchy exist or not
@@ -841,9 +841,10 @@ module.exports = function RequestHandlerModule(pb) {
         {
             if(route.path == ':locale')
             {
-                if(this.url.pathname.split('/')[1] != 'p')
+                var split_url = this.url.pathname.split('/');
+                if(split_url[1] != 'p')
                 {
-                    return this.doRedirect('/p'+  this.url.pathname , 301);
+                    return this.doRedirect('/p/'+  split_url[split_url.length-1] , 301);
                 }
             }
         }

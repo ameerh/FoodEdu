@@ -2,6 +2,7 @@
 
 body {
     font-family: "Open Sans", sans-serif;
+    font-size: 17px;
 }
 
 *
@@ -348,7 +349,7 @@ footer {
 }
 
 .dropdown-menu{
-   min-width: 220px !important;
+   min-width: 150px !important;
 }
 
 
@@ -367,11 +368,24 @@ footer {
 
 .space-betweem-div
 {
-    min-height: 30px;
-    height: 30px;
-    max-height: 30px;
+    min-height: 25px;
+    height: 25px;
+    max-height: 25px;
 }
 
+
+/*// link color*/
+
+.link-color
+{
+    color:#1e73be;
+    text-decoration: none;
+}
+/*// paragraph margin nulll*/
+
+p{
+    margin: 0px !important;
+}
 /*// space between footer and main content*/
 .spacebetween-footer-and-content
 {
@@ -401,17 +415,18 @@ footer {
 .more-detail-card
 {
     background-color: #fff;
-    min-height: 300px;
-    height: 300px;
-    max-height: 300px;
+    min-height: 270px;
+    height: 270px;
+    max-height: 270px;
 }
 .more-detail-content
 {
-    padding-left: 4em;
+    padding-left: 3em;
+    padding-right: 3em;
 }
 .set-more-link-heading
 {
-    margin-top: 1.5em !important;
+    margin-top: 2em !important;
 }
 .meet-editors-button
 {
@@ -421,6 +436,9 @@ footer {
     border-width: 0px !important;
     padding-left: 1em;
     padding-right: 1em;
+    height: 45px;
+    min-height: 45px;
+    max-height: 45px;
 }
 
 /*// set navigation bar*/
@@ -433,10 +451,21 @@ footer {
 .mySlides {display:none;}
 
 
+.slider-div
+{
+    padding-left: 5em;
+    height:400px;
+    min-height: 400px;
+    max-height: 400px;
+}
 
 
+/*// open dropdown on hover*/
 
+.dropdown-menu li:hover .sub-menu {
+    visibility: visible;
+}
 
-
-
-
+.dropdown:hover .dropdown-menu {
+    display: block;
+}

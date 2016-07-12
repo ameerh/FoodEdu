@@ -11,9 +11,9 @@
 
 module.exports = {
     "siteName": "footeducation",
-    "siteRoot": "https://52.38.184.71",
-    //"siteRoot": "http://localhost:8080",
-    "sitePort": 80,
+    //"siteRoot": "https://52.38.184.71",
+    "siteRoot": "http://localhost:8080",
+    "sitePort": 8080,
     "logging": {
         "level": "info"
     },

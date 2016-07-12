@@ -1,6 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
 
-body {
+body, html {
     font-family: "Open Sans", sans-serif;
     font-size: 17px;
 }
@@ -44,7 +44,6 @@ a:hover
 .navbar-default .navbar-nav>li>a {
     color: #fff;
     text-transform: capitalize;
-    font-weight: bold;
 }
 
 .navbar-default .navbar-nav>li>a:hover {
@@ -75,6 +74,7 @@ a:hover
 .dropdown-menu>li>a {
     color: #fff;
     text-transform: capitalize;
+    line-height: 3em;
 }
 
 .dropdown-menu>li>a:hover {
@@ -233,12 +233,16 @@ footer {
     }
 }
 
+@media (max-width: 767px) {
+    .navbar-default .navbar-nav .open .dropdown-menu>li>a {
+        color: #fff;
+        background-color: #277a58 !important;
+    }
 
-
-
-
-
-
+    .nav>li {
+        width: 100%;
+    }
+}
 
 @media (min-width: 768px) {
     .navbar {
@@ -396,6 +400,8 @@ p{
 .navigation-float-left
 {
     float: left !important;
+    width: 100%;
+    margin: 0;
 }
 /*//footer*/
 

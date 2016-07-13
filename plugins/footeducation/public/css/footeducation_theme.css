@@ -353,7 +353,7 @@ footer {
 }
 
 .dropdown-menu{
-   min-width: 150px !important;
+   min-width: 30px !important;
 }
 
 
@@ -471,7 +471,8 @@ p{
 .dropdown-menu li:hover .sub-menu {
     visibility: visible;
 }
-
 .dropdown:hover .dropdown-menu {
     display: block;
 }
+
+

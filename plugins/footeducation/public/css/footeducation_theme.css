@@ -303,7 +303,7 @@ footer {
 .footeducation-menu
 {
     height: inherit;
-    min-height: 100px;
+    min-height: 60px;
     max-height: inherit;
 }
 .footeducation-body
@@ -460,9 +460,9 @@ p{
 .slider-div
 {
     padding-left: 5em;
-    height:400px;
-    min-height: 400px;
-    max-height: 400px;
+    height:430px;
+    min-height: 430px;
+    max-height: 430px;
 }
 
 

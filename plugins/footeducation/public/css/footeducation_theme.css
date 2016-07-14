@@ -21,7 +21,7 @@ a
 
 a:hover
 {
-    color: #000;
+    color: dimgrey;
     text-decoration: none;
     outline: none;
 }
@@ -292,7 +292,9 @@ footer {
 {
     background-color: #000000 !important;
     margin: 0px;
+    line-height: 3.428571 !important;
 }
+
 .main-content-container
 {
     background-color: #ffffff;
@@ -463,6 +465,11 @@ p{
     height:430px;
     min-height: 430px;
     max-height: 430px;
+    .article h1
+    {
+        display: none;
+        color: white !important;
+    }
 }
 
 

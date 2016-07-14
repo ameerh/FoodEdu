@@ -74,7 +74,7 @@ a:hover
 .dropdown-menu>li>a {
     color: #fff;
     text-transform: capitalize;
-    line-height: 3em;
+    line-height: 1.5em;
 }
 
 .dropdown-menu>li>a:hover {
@@ -319,7 +319,7 @@ footer {
 }
 .article h1, .article h2, .article h3, .article h4
 {
-    margin-top: 20px !important;
+    margin-top: 0px !important;
 }
 .footeducation-logo
 {
@@ -432,7 +432,7 @@ p{
 }
 .set-more-link-heading
 {
-    margin-top: 2em !important;
+    margin-top: 2.5em !important;
 }
 .meet-editors-button
 {

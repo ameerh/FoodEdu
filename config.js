@@ -13,7 +13,7 @@ module.exports = {
     "siteName": "footeducation",
     "siteRoot": "https://footeducation-env.us-east-1.elasticbeanstalk.com/",
     //"siteRoot": "http://localhost:8080",
-    "sitePort": 80,
+    "sitePort": process.env.PORT,
     "logging": {
         "level": "info"
     },

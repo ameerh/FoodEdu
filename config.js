@@ -11,7 +11,7 @@
 
 module.exports = {
     "siteName": "footeducation",
-    "siteRoot": "https://52.38.184.71",
+    "siteRoot": "https://footeducation-env.us-east-1.elasticbeanstalk.com/",
     //"siteRoot": "http://localhost:8080",
     "sitePort": 80,
     "logging": {
@@ -21,9 +21,9 @@ module.exports = {
         "type": "mongo",
         "servers": [
             //LOCAL
-            "mongodb://127.0.0.1:27017/"
+            //"mongodb://127.0.0.1:27017/"
             //"mongodb: http://52.38.184.71/footeducation"
-            //"mongodb://daniel.geri:gobears2016@ds015924.mlab.com:15924/footeducation"
+            "mongodb://daniel.geri:gobears2016@ds015924.mlab.com:15924/footeducation"
         ],
         "name": "footeducation",
         "writeConcern": 1

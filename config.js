@@ -23,7 +23,7 @@ module.exports = {
             //LOCAL
             //"mongodb://127.0.0.1:27017/"
             //"mongodb: http://52.38.184.71/footeducation"
-            "mongodb://daniel.geri:gobears2016@ds015924.mlab.com:15924/footeducation"
+            "mongodb://ameerh:Masterlock123@ds117919.mlab.com:17919/footeducation"
         ],
         "name": "footeducation",
         "writeConcern": 1

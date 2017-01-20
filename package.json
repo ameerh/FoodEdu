@@ -51,12 +51,12 @@
         "mocha-lcov-reporter": "0.0.1",
         "should": "5.0.1"
     },
-    "main": "./pencilblue.js",
+    "main": "./footeducation.js",
     "engines": {
         "node": ">= 0.11.0 <5"
     },
     "scripts": {
-        "start": "node pencilblue.js",
+        "start": "node footeducation.js",
         "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec --recursive"
     },
     "licenses": [

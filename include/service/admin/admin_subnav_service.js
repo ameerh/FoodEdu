@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 var util = require('../../util.js');
 
@@ -48,7 +49,7 @@ module.exports = function AdminSubnavServiceModule(pb) {
      * @param {Function} getSubNavItems The callback function
      */
     AdminSubnavService.registerFor = function(key, getSubNavItems) {
-        if (!pb.validation.validateNonEmptyStr(key, true) || !util.isFunction(getSubNavItems)) {
+        if (!pb.validation.isNonEmptyStr(key, true) || !util.isFunction(getSubNavItems)) {
             return false;
         }
 
@@ -82,7 +83,7 @@ module.exports = function AdminSubnavServiceModule(pb) {
      * @return {Boolean} TRUE if function was unregistered, FALSE if not
      */
     AdminSubnavService.unregisterFor = function(key, registeredFunc) {
-        if (!pb.validation.validateNonEmptyStr(key, true) || !util.isFunction(registeredFunc)) {
+        if (!pb.validation.isNonEmptyStr(key, true) || !util.isFunction(registeredFunc)) {
             return false;
         }
         else if (!util.isArray(CALLBACKS[key])) {

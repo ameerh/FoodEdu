@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015  PencilBlue, LLC
+	Copyright (C) 2016  PencilBlue, LLC
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ module.exports = function(pb) {
         if (!pb.validation.validateNonEmptyStr(post.site_logo, true)) {
             return cb({
                 code: 500,
-                content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, self.ls.g('generic.SITE_LOGO_UPLOAD_FAILURE'))
+                content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, self.ls.g('generic.SITE_LOGO_UPLOAD_FAILURE'))
             });
         }
 
@@ -48,7 +48,7 @@ module.exports = function(pb) {
             if (util.isError(err)) {
                 return cb({
                     code: 500,
-                    content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, self.ls.g('generic.SITE_LOGO_UPLOAD_FAILURE'))
+                    content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, self.ls.g('generic.SITE_LOGO_UPLOAD_FAILURE'))
                 });
             }
 

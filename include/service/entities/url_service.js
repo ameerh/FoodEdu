@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var url  = require('url');
@@ -79,8 +80,7 @@ module.exports = function UrlServiceModule(pb) {
 
         //validate required params
         if (!url || !type) {
-            cb(new Error("The url and type parameters are required. URL=["+url+"] TYPE=["+type+"]"), false);
-            return;
+            return cb(new Error("The url and type parameters are required. URL=["+url+"] TYPE=["+type+"]"), false);
         }
 
         //build pattern
@@ -91,10 +91,8 @@ module.exports = function UrlServiceModule(pb) {
             url = url.substring(0, url.length - 1);
         }
         var pattern = "^\\/{0,1}" + util.escapeRegExp(url) + "\\/{0,1}$";
-
-        //execute search
         var where = {
-            url: new RegExp(pattern, 'g')
+            url: new RegExp(pattern, "i")
         };
         if (site !== undefined) {
             where[pb.SiteService.SITE_FIELD] = site;

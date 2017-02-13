@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,15 +14,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
-    
+
     //pb dependencies
     var util                = pb.util;
     var BaseController      = pb.BaseController;
     var ApiActionController = pb.ApiActionController;
     var UrlService          = pb.UrlService;
-    
+
     /**
      * Controller to properly route and handle remote calls to interact with
      * the UrlService
@@ -64,16 +65,16 @@ module.exports = function(pb) {
 
         var errors = [];
         if (action === 'exists_for') {
-            if (!pb.validation.validateNonEmptyStr(this.query.id, false)) {
+            if (!pb.validation.isNonEmptyStr(this.query.id, false)) {
                 errors.push("The id parameter must be a valid string");
             }
 
-            if (!pb.validation.validateNonEmptyStr(this.query.type, true)) {
+            if (!pb.validation.isNonEmptyStr(this.query.type, true)) {
                 errors.push("The type parameter is required");
             }
         }
 
-        if (!pb.validation.validateNonEmptyStr(this.query.url, true)) {
+        if (!pb.validation.isNonEmptyStr(this.query.url, true)) {
             errors.push("The url parameter is required");
         }
         cb(null, errors);
@@ -90,8 +91,7 @@ module.exports = function(pb) {
         var themes  = UrlService.exists(this.query.url);
 
         //now build response
-        var content = BaseController.apiResponse(BaseController.API_SUCCESS, '', themes);
-        cb({content: content});
+        cb({content: BaseController.apiResponse(BaseController.API_SUCCESS, '', themes)});
     };
 
     /**
@@ -116,15 +116,17 @@ module.exports = function(pb) {
             service = new UrlService();
         }
         service.existsForType(params, function(err, exists) {
+            var content, code;
             if (util.isError(err)) {
-                var content = BaseController.apiResponse(BaseController.API_FAILURE, err.message);
-                cb({content: content, code: 500});
-                return;
+                content = BaseController.apiResponse(BaseController.API_FAILURE, err.message);
+                code = 500;
+            }
+            else {
+                content = BaseController.apiResponse(BaseController.API_SUCCESS, '', exists);
             }
 
             //now build response
-            var content = BaseController.apiResponse(BaseController.API_SUCCESS, '', exists);
-            cb({content: content});
+            cb({content: content, code: code});
         });
     };
 

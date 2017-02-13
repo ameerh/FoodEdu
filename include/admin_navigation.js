@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2015  PencilBlue, LLC
+ Copyright (C) 2016  PencilBlue, LLC
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -287,10 +287,10 @@ module.exports = function AdminNavigationModule(pb) {
      * @param {String} site
      */
     function getAdditionsInScope(additions, site) {
-        if (additions.hasOwnProperty(site)) {
+        if (additions[site]) {
             return util.clone(additions[site]);
         }
-        else if (additions.hasOwnProperty(pb.SiteService.GLOBAL_SITE)) {
+        else if (additions[pb.SiteService.GLOBAL_SITE]) {
             return util.clone(additions[pb.SiteService.GLOBAL_SITE]);
         }
         return util.clone(additions);
@@ -439,7 +439,7 @@ module.exports = function AdminNavigationModule(pb) {
 
     AdminNavigation.addChild = function(parentId, node) {
         AdminNavigation.addChildToSite(parentId, node, pb.SiteService.GLOBAL_SITE);
-    }
+    };
 
     /**
      * Adds a new child node to an existing top level node
@@ -612,7 +612,7 @@ module.exports = function AdminNavigationModule(pb) {
                         }
 
                         for (var p = 0; p < activeItems.length; p++) {
-                            if (activeItems[p] == adminNavigation[i].children[j].id) {
+                            if (activeItems[p] === adminNavigation[i].children[j].id) {
                                 adminNavigation[i].children[j].active = 'active';
                                 break;
                             }

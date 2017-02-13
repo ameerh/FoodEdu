@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
 
@@ -48,7 +49,7 @@ module.exports = function(pb) {
              * @property dao
              * @type {DAO}
              */
-            self.dao = new DAO();
+            self.dao = new pb.SiteQueryService(self.getServiceContext());
 
             cb(err, true);
         };
@@ -78,10 +79,13 @@ module.exports = function(pb) {
                 }
 
                 if(!passwordReset) {
-                    passwordReset = pb.DocumentCreator.create('password_reset', {user_id: user[pb.DAO.getIdField()].toString()});
+                    passwordReset = {
+                        userId: user[pb.DAO.getIdField()].toString(),
+                        object_type: 'password_reset'
+                    };
                 }
 
-                passwordReset.verification_code = util.uniqueId();
+                passwordReset.verificationCode = util.uniqueId();
 
                 self.dao.save(passwordReset, function(err, result) {
                     if(util.isError(err)) {

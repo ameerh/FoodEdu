@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,12 +14,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
-    
+
     //pb dependencies
     var util = pb.util;
-    
+
     /**
      * Interface for managing comments
      * @class ManageComments
@@ -103,7 +104,7 @@ module.exports = function(pb) {
 
         this.getCommentingUser = function(index) {
             self.dao = new pb.DAO();
-            self.dao.__proto__.loadById(comments[index].commenter, 'user', function(err, user) {
+            self.dao.loadById(comments[index].commenter, 'user', function(err, user) {
                 if(!util.isError(err) && user !== null) {
                     comments[index].user_name = user.first_name + ' ' + user.last_name;
                 }

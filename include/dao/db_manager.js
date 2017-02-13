@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //requirements
 var async    = require('async');
@@ -59,7 +60,7 @@ module.exports = function DBManagerModule(pb) {
      * @class DBManager
      * @constructor
      */
-    function DBManager(){
+    function DBManager() {
 
         /**
          * Reference to the system instance of System
@@ -156,7 +157,7 @@ module.exports = function DBManagerModule(pb) {
          * @return {Boolean} Whether the pool has been connected
          */
         this.hasConnected = function(name){
-            return dbs.hasOwnProperty(name);
+            return typeof dbs[name] !== 'undefined';
         };
 
         /**
@@ -363,7 +364,7 @@ module.exports = function DBManagerModule(pb) {
         //constructor specific logic
         //register for shutdown
         system.registerShutdownHook('DBManager', this.shutdown);
-    };
+    }
 
     /**
      * The protocol prefix for connecting to a mongo cluster
@@ -406,7 +407,7 @@ module.exports = function DBManagerModule(pb) {
                 str += ',';
             }
             str += hostAndPort;
-        };
+        }
         return pb.UrlService.urlJoin(str, config.db.name) + options;
     };
 

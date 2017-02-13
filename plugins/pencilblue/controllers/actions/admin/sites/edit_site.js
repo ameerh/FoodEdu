@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2015  PencilBlue, LLC
+ Copyright (C) 2016  PencilBlue, LLC
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -32,14 +32,14 @@ module.exports = function EditSiteActionModule(pb) {
         if(message) {
             return cb({
                 code: 400,
-                content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, message)
+                content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, message)
             });
         }
 
         if(!pb.security.isAuthorized(self.session, {admin_level: self.body.admin})) {
             return cb({
                 code: 400,
-                content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, self.ls.g('generic.INSUFFICIENT_CREDENTIALS'))
+                content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, self.ls.g('generic.INSUFFICIENT_CREDENTIALS'))
             });
         }
 
@@ -50,7 +50,7 @@ module.exports = function EditSiteActionModule(pb) {
                 if(isTaken) {
                     return cb({
                         code: 400,
-                        content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, self.ls.g('sites.DUPLICATE_INFO'))
+                        content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, self.ls.g('sites.DUPLICATE_INFO'))
                     });
                 }
 

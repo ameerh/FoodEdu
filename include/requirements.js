@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var path = require('path');
@@ -27,6 +28,13 @@ var path = require('path');
  */
 module.exports = function PB(config) {
 
+    //older versions of node did not have process as a core module.  We ensure that we have access to it here and ensure
+    // it is set as a global variable
+    if (!global.process) {
+        console.log('Process module imported as require');
+        global.process = require('process');
+    }
+
     //define what will become the global entry point into the server api.
     var pb = {};
 
@@ -35,7 +43,6 @@ module.exports = function PB(config) {
 
     //setup utils
     pb.util    = require(path.join(config.docRoot, '/include/util.js'));
-
     Object.defineProperty(pb, 'utils', {
         get: function() {
             pb.log.warn('PencilBlue: pb.utils is deprecated.  Use pb.util instead');
@@ -45,6 +52,7 @@ module.exports = function PB(config) {
 
     //initialize logging
     pb.log    = require(path.join(config.docRoot, '/include/utils/logging.js'))(config);
+    pb.AsyncEventEmitter = require(path.join(config.docRoot, '/include/utils/async_event_emitter.js'))(pb);
 
     //setup the System instance
     pb.System = require(path.join(config.docRoot, 'include/system/system.js'));
@@ -88,7 +96,7 @@ module.exports = function PB(config) {
     pb.SiteQueryService = require(path.join(config.docRoot, '/include/service/entities/site_query_service.js'))(pb);
 
 
-  //setup object services
+    //setup object services
     pb.SimpleLayeredService         = require(path.join(config.docRoot, '/include/service/simple_layered_service.js'))(pb);
     pb.MemoryEntityService          = require(path.join(config.docRoot, '/include/service/memory_entity_service.js'))(pb);
     pb.CacheEntityService           = require(path.join(config.docRoot, '/include/service/cache_entity_service.js'))(pb);
@@ -135,6 +143,8 @@ module.exports = function PB(config) {
     pb.ApiActionController = require(path.join(config.docRoot, '/controllers/api/api_action_controller.js'))(pb);
     pb.ErrorViewController = require(path.join(config.docRoot, '/controllers/error_controller.js'))(pb);
     pb.RequestHandler      = require(path.join(config.docRoot, '/include/http/request_handler.js'))(pb);
+    pb.Middleware          = require(path.join(config.docRoot, '/include/http/middleware'))(pb);
+    pb.Router              = require(path.join(config.docRoot, '/include/http/router.js'))(pb);
     pb.HttpStatus          = require('http-status-codes');
 
     //setup errors
@@ -224,7 +234,7 @@ module.exports = function PB(config) {
     //media renderers
     pb.media = {
         renderers: {
-            BaseMediaRenderer: require(path.join(config.docRoot, '/include/service/media/renderers/base_media_renderer.js'))(pb),
+            BaseMediaRenderer: require(path.join(config.docRoot, '/include/service/media/renderers/base_media_renderer.js'))(pb)
         },
 
         providers: {
@@ -232,21 +242,22 @@ module.exports = function PB(config) {
             MongoMediaProvider: require(path.join(config.docRoot, '/include/service/media/mongo_media_provider.js'))(pb)
         }
     };
-    pb.media.renderers.ImageMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/image_media_renderer.js'))(pb),
-    pb.media.renderers.VideoMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/video_media_renderer.js'))(pb),
-    pb.media.renderers.YouTubeMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/youtube_media_renderer.js'))(pb),
-    pb.media.renderers.DailyMotionMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/daily_motion_media_renderer.js'))(pb),
-    pb.media.renderers.VimeoMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/vimeo_media_renderer.js'))(pb),
-    pb.media.renderers.VineMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/vine_media_renderer.js'))(pb),
-    pb.media.renderers.InstagramMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/instagram_media_renderer.js'))(pb),
-    pb.media.renderers.SlideShareMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/slideshare_media_renderer.js'))(pb),
-    pb.media.renderers.TrinketMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/trinket_media_renderer.js'))(pb),
-    pb.media.renderers.StorifyMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/storify_media_renderer.js'))(pb),
+    pb.media.renderers.ImageMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/image_media_renderer.js'))(pb);
+    pb.media.renderers.VideoMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/video_media_renderer.js'))(pb);
+    pb.media.renderers.YouTubeMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/youtube_media_renderer.js'))(pb);
+    pb.media.renderers.DailyMotionMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/daily_motion_media_renderer.js'))(pb);
+    pb.media.renderers.VimeoMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/vimeo_media_renderer.js'))(pb);
+    pb.media.renderers.VineMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/vine_media_renderer.js'))(pb);
+    pb.media.renderers.InstagramMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/instagram_media_renderer.js'))(pb);
+    pb.media.renderers.SlideShareMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/slideshare_media_renderer.js'))(pb);
+    pb.media.renderers.TrinketMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/trinket_media_renderer.js'))(pb);
+    pb.media.renderers.StorifyMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/storify_media_renderer.js'))(pb);
     pb.media.renderers.KickStarterMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/kickstarter_media_renderer.js'))(pb);
     pb.media.renderers.PdfMediaRenderer = require(path.join(config.docRoot, '/include/service/media/renderers/pdf_media_renderer.js'))(pb);
 
     //providers and service
     pb.MediaService = require(path.join(config.docRoot, '/include/service/entities/media_service.js'))(pb);
+    pb.MediaServiceV2 = require(path.join(config.docRoot, '/include/service/entities/content/media_service_v2.js'))(pb);
 
     //content services
     pb.SectionService = require(config.docRoot+'/include/service/entities/section_service.js')(pb);
@@ -267,6 +278,18 @@ module.exports = function PB(config) {
     pb.ArticleService        = ArticleServiceModule.ArticleService;
     pb.MediaLoader           = ArticleServiceModule.MediaLoader;
     pb.CommentService        = require(config.docRoot+'/include/theme/comments.js')(pb);
+
+    pb.PluginValidationService = require(path.join(config.docRoot, '/include/service/entities/plugins/plugin_validation_service.js'))(pb);
+    pb.PluginDependencyService = require(path.join(config.docRoot, '/include/service/entities/plugins/plugin_dependency_service.js'))(pb);
+    pb.NpmPluginDependencyService = require(path.join(config.docRoot, '/include/service/entities/plugins/npm_plugin_dependency_service.js'))(pb);
+    pb.BowerPluginDependencyService = require(path.join(config.docRoot, '/include/service/entities/plugins/bower_plugin_dependency_service.js'))(pb);
+    pb.PluginResourceLoader = require(path.join(config.docRoot, '/include/service/entities/plugins/loaders/plugin_resource_loader.js'))(pb);
+    pb.PluginServiceLoader = require(path.join(config.docRoot, '/include/service/entities/plugins/loaders/plugin_service_loader.js'))(pb);
+    pb.PluginControllerLoader = require(path.join(config.docRoot, '/include/service/entities/plugins/loaders/plugin_controller_loader.js'))(pb);
+    pb.PluginLocalizationLoader = require(path.join(config.docRoot, '/include/service/entities/plugins/loaders/plugin_localization_loader.js'))(pb);
+    pb.PluginInitializationService = require(path.join(config.docRoot, '/include/service/entities/plugins/plugin_initialization_service.js'))(pb);
+
+    pb.PasswordResetService = require(path.join(config.docRoot, '/include/service/entities/password_reset_service.js'))(pb);
 
     return pb;
 };

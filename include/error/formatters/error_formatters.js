@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,23 +14,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
+var _ = require('lodash');
 var path        = require('path');
-var HtmlEncoder = require('htmlencode');
+var HttpStatusCodes = require('http-status-codes');
+var XmlErrorFormatter = require('./xml_error_formatter');
 
 module.exports = function(pb) {
-    
+
     //pb dependencies
     var util = pb.util;
-    
+
     /**
      * Provides functions and mechanisms to serialize errors
      * @class ErrorFormatters
      * @constructor
      */
     function ErrorFormatters() {}
-    
+
     /**
      * The fallback MIME type
      * @private
@@ -40,17 +43,7 @@ module.exports = function(pb) {
      * @type {String}
      */
     var DEFAULT_MIME = 'text/html';
-    
-    /**
-     * Error code when a validation failure occurs
-     * @private
-     * @static
-     * @readonly
-     * @property BAD_REQUEST
-     * @type {Integer}
-     */
-    var BAD_REQUEST = 400;
-    
+
     /**
      * Converts an error to a plain object that can be serialized
      * @private
@@ -67,13 +60,13 @@ module.exports = function(pb) {
         if (pb.config.logging.showErrors) {
             content.stack = params.error.stack;
         }
-        if (params.error.code === BAD_REQUEST) {
+        if (params.error.code === HttpStatusCodes.BAD_REQUEST) {
             delete content.stack;
             content.validationErrors = params.error.validationErrors;
         }
         return content;
     };
-    
+
     /**
      * @private
      * @static
@@ -113,7 +106,7 @@ module.exports = function(pb) {
      */
     ErrorFormatters.html = function(params, cb) {
         if (params.errorCount > 1) {
-            
+
             //we know we've hit a recursive error situation.  Bail out
             return cb(
                 null,
@@ -122,45 +115,47 @@ module.exports = function(pb) {
                 '</pre></body></html>'
             );
         }
-        
+
         //let the default error controller handle it.
-        var code = params.error.code || 500;
+        var code = params.error.code || HttpStatusCodes.INTERNAL_SERVER_ERROR;
         var ErrorController  = null;
         var paths = [
             path.join(pb.config.docRoot, 'plugins', params.activeTheme, 'controllers/error', code + '.js'),
-            path.join(pb.config.docRoot, 'plugins', params.activeTheme, 'controllers/error/index.js'),
-            path.join(pb.config.docRoot, 'controllers/error_controller.js')
+            path.join(pb.config.docRoot, 'plugins', params.activeTheme, 'controllers/error/index.js')
         ];
+        if (params.activeTheme !== pb.config.plugins.default) {
+            paths.push(path.join(pb.config.docRoot, 'plugins', pb.config.plugins.default, 'controllers/error', code + '.js'));
+        }
+        paths.push(path.join(pb.config.docRoot, 'controllers/error_controller.js'));
+
+        //iterate over paths until you find a good one
         for (var i = 0; i < paths.length; i++) {
             if (failedControllerPaths[paths[i]]) {
                 //we've seen it and it didn't exist or had a syntax error.  Moving on!
                 continue;
             }
-            
+
             //attempt to load the controller
             try {
                 ErrorController = require(paths[i])(pb);
                 break;
             }
             catch(e){
-                
+
                 //we failed so make sure don't do that again...
-                failedControllerPaths[paths[i]];
+                failedControllerPaths[paths[i]] = true;
             }
-        };
-        var cInstance = new ErrorController();
-        var context = {
-            pathVars: {},
-            cInstance: cInstance,
-            themeRoute: {},
-            activeTheme: params.activeTheme,
-            initParams: {
-                error: params.error
-            }
-        };
-        params.reqHandler.doRender(context);
+        }
+
+        params.request.controllerInstance = new ErrorController();
+        params.request.controllerInstance.error = params.error;
+        params.request.themeRoute = !!params.request.themeRoute ? _.clone(params.request.themeRoute) : {};
+        params.request.routeTheme = params.request.routeTheme || {};
+        params.request.siteObj = params.request.siteObj || pb.SiteService.getGlobalSiteContext();
+        params.request.themeRoute.handler = 'render';
+        params.request.router.continueAfter('parseRequestBody');
     };
-    
+
     /**
      * Serializes an error as XML
      * @static
@@ -173,57 +168,19 @@ module.exports = function(pb) {
      * @param {Function} cb
      */
     ErrorFormatters.xml = function(params, cb) {
-        
-        var xmlObj = function(key, obj) {
-            var xml = '<'+HtmlEncoder.htmlEncode(key)+'>'
-            util.forEach(obj, function(val, key) {
-                
-                if (util.isArray(val)) {
-                    xml += xmlArray(key, val);
-                }
-                else if (util.isObject(val)) {
-                    xml += xmlObj(key, val);
-                }
-                else {
-                    xml += '<'+HtmlEncoder.htmlEncode(key)+'>' + HtmlEncoder.htmlEncode(val + '') + '</'+HtmlEncoder.htmlEncode(key)+'>';
-                }
-            });
-            xml += '</'+HtmlEncoder.htmlEncode(key)+'>';
-            return xml;
-        };
-        var xmlArray = function(key, obj) {
-            var xml = '';
-            util.forEach(obj, function(val, i) {
-                
-                if (util.isArray(val)) {
-                    xml += xmlArray(key+'_'+i, val);
-                }
-                else if (util.isObject(val)) {
-                    xml += xmlObj(key, val);
-                }
-                else {
-                    xml += '<'+HtmlEncoder.htmlEncode(key)+'>' + HtmlEncoder.htmlEncode(val + '') + '</'+HtmlEncoder.htmlEncode(key)+'>';
-                }
-            });
-            return xml;
-        };
-        var xmlPrimitive = function(key, val) {
-            return '<'+HtmlEncoder.htmlEncode(key)+'>' + HtmlEncoder.htmlEncode(val + '') + '</'+HtmlEncoder.htmlEncode(key)+'>';
-        };
-        cb(
-            null,
-            xmlObj('error', convertToObject(params))
-        );
+
+        var objToSerialize = convertToObject(params);
+        cb(null, XmlErrorFormatter.serialize(objToSerialize));
     };
-    
+
     /**
-     * Registers a function to be mapped to a given MIME type.  The function 
-     * will be expected to serialize any given Error to the format specified by 
+     * Registers a function to be mapped to a given MIME type.  The function
+     * will be expected to serialize any given Error to the format specified by
      * the MIME type
      * @static
      * @method register
      * @param {String} mime The mime type to register the provider for
-     * @param {Function} A function that takes two parameters.  The first is an 
+     * @param {Function} A function that takes two parameters.  The first is an
      * object that provides the error and the second parameter is the callback.
      * @return {Boolean} TRUE when the provider was registered, FALSE if not
      */
@@ -234,21 +191,21 @@ module.exports = function(pb) {
         MIME_MAP[mime] = formatterFunction;
         return true;
     };
-    
+
     /**
-     * Unregisters the provider for the given MIME type.  If a default MIME 
-     * type is specified the current formatter will be unregistered and set to 
+     * Unregisters the provider for the given MIME type.  If a default MIME
+     * type is specified the current formatter will be unregistered and set to
      * the default implementation
      * @static
      * @method unregister
      * @param {String} mime The MIME type to unregister
-     * @return {Boolean} TRUE when the provider was found and unregistered, 
+     * @return {Boolean} TRUE when the provider was found and unregistered,
      * FALSE if not
      */
     ErrorFormatters.unregister = function(mime) {
         if (util.isFunction(MIME_MAP[mime])) {
             delete MIME_MAP[mime];
-            
+
             //set the defaults back if we have them
             if (util.isFunction(DEFAULTS[mime])) {
                 MIME_MAP[mime] = DEFAULTS[mime];
@@ -257,7 +214,7 @@ module.exports = function(pb) {
         }
         return false;
     };
-    
+
     /**
      * Formats an error for the provided MIME type
      * @static
@@ -279,7 +236,7 @@ module.exports = function(pb) {
         else if (!util.isError(params.error)) {
             return cb(new Error('The params.error parameter must be an Error'));
         }
-        
+
         //find the formatter, fall back to HTML if not provided
         var mime      = params.mime;
         var formatter = MIME_MAP[mime];
@@ -287,11 +244,11 @@ module.exports = function(pb) {
             mime      = DEFAULT_MIME;
             formatter = MIME_MAP[mime];
         }
-        
+
         //execute the formatter
         formatter(params, function(err, content) {
             cb(
-                err, 
+                err,
                 {
                     mime: mime,
                     content: content
@@ -299,21 +256,21 @@ module.exports = function(pb) {
             );
         });
     };
-    
+
     /**
      * Retrieves the formatter for the specified MIME type
      * @static
      * @method get
      * @param {String} mime
-     * @return {Function} formatter for the specified MIME. 'undefined' if does 
+     * @return {Function} formatter for the specified MIME. 'undefined' if does
      * not exist.
      */
     ErrorFormatters.get = function(mime) {
         return MIME_MAP[mime];
     };
-         
+
     /**
-     * Contains the default mapping of MIME type to function that will serialize 
+     * Contains the default mapping of MIME type to function that will serialize
      * the error to that format
      * @private
      * @static
@@ -325,11 +282,11 @@ module.exports = function(pb) {
         'text/json': ErrorFormatters.json,
         'text/html': ErrorFormatters.html,
         'application/xml': ErrorFormatters.xml,
-        'text/xml': ErrorFormatters.xml,
+        'text/xml': ErrorFormatters.xml
     });
-            
+
     /**
-     * Contains the mapping of MIME type to function that will serialize the 
+     * Contains the mapping of MIME type to function that will serialize the
      * error to that format
      * @private
      * @static

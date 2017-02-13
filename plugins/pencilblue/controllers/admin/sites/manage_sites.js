@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2015  PencilBlue, LLC
+ Copyright (C) 2016  PencilBlue, LLC
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ module.exports = function(pb) {
     ManageSites.getSubNavItems = function(key, ls) {
         return [{
             name: 'manage_sites',
-            title: ls.get('MANAGE_SITES'),
+            title: ls.g('admin.MANAGE_SITES'),
             icon: 'refresh',
             href: '/admin/sites'
         }, {

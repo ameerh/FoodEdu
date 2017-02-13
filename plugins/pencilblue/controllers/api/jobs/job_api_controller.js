@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,9 +14,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
-    
+
     //pb dependencies
     var util = pb.util;
     var BaseController      = pb.BaseController;
@@ -30,7 +31,7 @@ module.exports = function(pb) {
      * @constructor
      * @extends ApiActionController
      */
-    function JobApiController() {};
+    function JobApiController() {}
     util.inherits(JobApiController, ApiActionController);
 
     //constants
@@ -102,14 +103,11 @@ module.exports = function(pb) {
         var service      = new pb.JobService();
         service.getLogs(this.pathVars.id, startingDate, function(err, logEntries) {
             if (util.isError(err)) {
-                var content = BaseController.apiResponse(BaseController.API_FAILURE, err.stack);
-                cb({content: content, code: 500});
-                return;
+                return cb({content: BaseController.apiResponse(BaseController.API_FAILURE, err.stack), code: 500});
             }
 
             //now build response
-            var content = BaseController.apiResponse(BaseController.API_SUCCESS, '', logEntries);
-            cb({content: content});
+            cb({content: BaseController.apiResponse(BaseController.API_SUCCESS, '', logEntries)});
         });
     };
 
@@ -124,14 +122,11 @@ module.exports = function(pb) {
         var service = new pb.JobService();
         service.loadById(this.pathVars.id, function(err, logEntries) {
             if (util.isError(err)) {
-                var content = BaseController.apiResponse(BaseController.API_FAILURE, err.stack);
-                cb({content: content, code: 500});
-                return;
+                return cb({content: BaseController.apiResponse(BaseController.API_FAILURE, err.stack), code: 500});
             }
 
             //now build response
-            var content = BaseController.apiResponse(BaseController.API_SUCCESS, '', logEntries);
-            cb({content: content});
+            cb({content: BaseController.apiResponse(BaseController.API_SUCCESS, '', logEntries)});
         });
     };
 

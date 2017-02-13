@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var os      = require('os');
 var https   = require('https');
-var process = require('process');
 var domain  = require('domain');
 var util    = require('../util.js');
 
@@ -135,8 +135,8 @@ module.exports = function CallHomeServiceModule(pb) {
             pb.log.silly('CallHomeService: An error occurred attempting to send event. %s', err.stack);
         });
         d.run(getDomainRunner(options, postData));
-    };
-    
+    }
+
     /**
      *
      * @private
@@ -163,7 +163,7 @@ module.exports = function CallHomeServiceModule(pb) {
             post_req.write(postData);
             post_req.end();
         };
-    };
+    }
 
     /**
      *
@@ -175,7 +175,7 @@ module.exports = function CallHomeServiceModule(pb) {
      */
     function onResponseRecieved(res, json) {
         pb.log.silly('CallHomeService: Event Response: %s', json);
-    };
+    }
 
     //exports
     return CallHomeService;

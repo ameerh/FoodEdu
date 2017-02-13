@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('../../../util.js');
@@ -28,9 +29,9 @@ module.exports = function PluginJobRunnerModule(pb) {
      */
     function PluginJobRunner() {
         PluginJobRunner.super_.call(this);
-        
+
         /**
-         * 
+         *
          * @property pluginService
          * @type {PluginService}
          */
@@ -91,11 +92,10 @@ module.exports = function PluginJobRunnerModule(pb) {
     PluginJobRunner.prototype.processClusterResults = function(err, results, cb) {
         if (util.isError(err)) {
             this.log(err.stack);
-            cb(err, results);
-            return;
+            return cb(err, results);
         }
 
-        var firstErr = undefined;
+        var firstErr;
         var success  = true;
         for (var i = 0; i < results.length; i++) {
             if (!results[i]) {

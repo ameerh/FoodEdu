@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,39 +14,33 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
-    
+
     //pb dependencies
     var util        = pb.util;
     var UserService = pb.UserService;
-    
+
     /**
      * Creates a new user
      */
     function NewUser(){}
     util.inherits(NewUser, pb.BaseApiController);
-    
+
     /**
      * Initializes the controller
-     * @method init
+     * @method initSync
      * @param {Object} context
-     * @param {Function} cb
      */
-    NewUser.prototype.init = function(context, cb) {
-        var self = this;
-        var init = function(err) {
-            
-            /**
-             * 
-             * @property service
-             * @type {UserService}
-             */
-            self.service = new UserService(self.getServiceContext());
-                
-            cb(err, true);
-        };
-        NewUser.super_.prototype.init.apply(this, [context, init]);
+    NewUser.prototype.initSync = function(context) {
+
+        /**
+         *
+         * @property service
+         * @type {UserService}
+         */
+        this.service = new UserService(this.getServiceContext());
     };
 
     /**
@@ -61,7 +55,7 @@ module.exports = function(pb) {
         if(!pb.security.isAuthorized(self.session, {admin_level: post.admin})) {
             return cb({
                 code: 400,
-                content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, self.ls.get('INSUFFICIENT_CREDENTIALS'))
+                content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, self.ls.g('generic.INSUFFICIENT_CREDENTIALS'))
             });
         }
 

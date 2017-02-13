@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,14 +14,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
-    
+
     //pb dependencies
     var util = pb.util;
-    
+
     /**
      * Interface for managing media
+     * @class ManageMedia
+     * @constructor
+     * @extends BaseAdminController
      */
     function ManageMedia(){}
     util.inherits(ManageMedia, pb.BaseAdminController);
@@ -50,7 +54,7 @@ module.exports = function(pb) {
             }
 
             self.getAngularObjects(mediaData, function(angularObjects) {
-                var title = self.ls.get('MANAGE_MEDIA');
+                var title = self.ls.g('media.MANAGE_MEDIA');
                 self.setPageName(title);
                 self.ts.registerLocal('angular_objects', new pb.TemplateValue(angularObjects, false));
                 self.ts.load('admin/content/media/manage_media', function(err, result) {
@@ -73,7 +77,7 @@ module.exports = function(pb) {
                 {
                     navigation: pb.AdminNavigation.get(self.session, ['content', 'media'], self.ls, self.site),
                     pills: pills,
-                    media: pb.MediaService.formatMedia(mediaData)
+                    media: pb.MediaServiceV2.formatMedia(mediaData)
                 });
             //TODO: err first arg for style. User experience error when no pills?
             cb(angularObjects);
@@ -83,7 +87,7 @@ module.exports = function(pb) {
     ManageMedia.getSubNavItems = function(key, ls, data) {
         return [{
             name: 'manage_media',
-            title: ls.get('MANAGE_MEDIA'),
+            title: ls.g('media.MANAGE_MEDIA'),
             icon: 'refresh',
             href: '/admin/content/media'
         }, {

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var HtmlEncoder = require('htmlencode');
@@ -152,7 +153,7 @@ module.exports = function VideoMediaRendererModule(pb) {
      */
     VideoMediaRenderer.getType = function(urlStr) {
         return VideoMediaRenderer.isSupported(urlStr) ? TYPE : null;
-    }
+    };
 
     /**
      * Retrieves the Font Awesome icon class.  It is safe to assume that the type
@@ -225,7 +226,7 @@ module.exports = function VideoMediaRendererModule(pb) {
 
         //construct HTML snippet
         var embedUrl = VideoMediaRenderer.getEmbedUrl(media.location);
-        var html = '<video ' + BaseMediaRenderer.getAttributeStr(options.attrs) +
+        var html = '<video ' + BaseMediaRenderer.getAttributeStr(options.attrs) + ' ' +
             BaseMediaRenderer.getStyleAttrStr(options.style) +
             ' controls><source src="' + HtmlEncoder.htmlEncode(embedUrl) + '"';
 

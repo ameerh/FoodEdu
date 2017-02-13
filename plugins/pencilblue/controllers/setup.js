@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,9 +14,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function SetupViewControllerModule(pb) {
-    
+
     //pb dependencies
     var util = pb.util;
 
@@ -39,7 +40,7 @@ module.exports = function SetupViewControllerModule(pb) {
 
         pb.settings.get('system_initialized', function(err, isSetup){
             if (util.isError(err)) {
-                throw new PBError("A database connection could not be established", 500);
+                throw new pb.PBError("A database connection could not be established", 500); // PBError class necessary?
             }
 
             //when user count is 1 or higher the system has already been initialized

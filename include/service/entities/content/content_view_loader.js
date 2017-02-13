@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015  PencilBlue, LLC
+	Copyright (C) 2016  PencilBlue, LLC
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ module.exports = function(pb) {
      * @param {Object} context.session
      * @param {ContentObjectService} context.service
      * @param {String} context.activeTheme
+     * @param {CommentService} [context.commentService]
+     * @param {object} context.siteObj
      */
     function ContentViewLoader(context) {
         this.ts = context.ts;
@@ -51,7 +53,13 @@ module.exports = function(pb) {
         this.hostname = context.hostname;
         this.onlyThisSite = context.onlyThisSite;
         this.activeTheme = context.activeTheme;
-    };
+
+        /**
+         * @property commentService
+         * @type {CommentService}
+         */
+        this.commentService = context.commentService || new pb.CommentService(context);
+    }
 
     /**
      *
@@ -64,7 +72,7 @@ module.exports = function(pb) {
 
     /**
      *
-     * @method getMetaInfo
+     * @method renderSingle
      * @param {Object} content
      * @param {Object} options
      * @param {Function} cb
@@ -147,7 +155,7 @@ module.exports = function(pb) {
         //preference and we can fall back on the default (index).  We depend on the
         //template service to determine who has priority based on the active theme
         //then defaulting back to pencilblue.
-        if (!pb.validation.validateNonEmptyStr(uidAndTemplate, true)) {
+        if (!pb.validation.isNonEmptyStr(uidAndTemplate, true)) {
             var defautTemplatePath = this.getDefaultTemplatePath();
             pb.log.silly("ContentController: No template specified, defaulting to %s.", defautTemplatePath);
             return cb(null, defautTemplatePath);
@@ -436,7 +444,7 @@ module.exports = function(pb) {
         var self           = this;
         var commentingUser = null;
         if(pb.security.isAuthenticated(this.session)) {
-            commentingUser = pb.CommentService.getCommentingUser(this.session.authentication.user);
+            commentingUser = this.commentService.getCommentingUser(this.session.authentication.user);
         }
 
         ts.registerLocal('user_photo', function(flag, cb) {
@@ -450,7 +458,7 @@ module.exports = function(pb) {
         ts.registerLocal('display_login', commentingUser ? 'none' : 'block');
         ts.registerLocal('comments_length', util.isArray(content.comments) ? content.comments.length : 0);
         ts.registerLocal('individual_comments', function(flag, cb) {
-            if (!util.isArray(content.comments) || content.comments.length == 0) {
+            if (!util.isArray(content.comments) || content.comments.length === 0) {
                 return cb(null, '');
             }
 

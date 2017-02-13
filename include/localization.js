@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var fs     = require('fs');
@@ -33,7 +34,7 @@ module.exports = function LocalizationModule(pb) {
      * @module Services
      * @class Localization
      * @constructor
-     * @param {Object} request The request object
+     * @param {Request|string} request The request object
      * @param {Object} [options]
      * @param {String} [options.activeTheme]
      * @param {Array} [options.supported] The languages that the localization
@@ -154,14 +155,6 @@ module.exports = function LocalizationModule(pb) {
     /**
      * @static
      * @readonly
-     * @property keys
-     * @type {Object}
-     */
-    Localization.keys = {};
-
-    /**
-     * @static
-     * @readonly
      * @property PARAM_REPLACEMENT_REGEX
      * @type {RegExp}
      */
@@ -170,9 +163,9 @@ module.exports = function LocalizationModule(pb) {
     /**
      * Localizes a string by searching for keys within the template and replacing
      * them with the specified values.
-     *
+     * @deprecated
      * @method localize
-     * @param {array} sets The localizations sets to search in
+     * @param {Array} sets The localizations sets to search in
      * @param {string} text The text to localize
      * @param {string} hostname The current hostname
      * @return {string} The text where keys have been replaced with translated values
@@ -181,26 +174,40 @@ module.exports = function LocalizationModule(pb) {
         if (pb.log.isSilly()) {
             pb.log.silly('Localization: Localizing text - Locale [%s] Sets %s', this.language, JSON.stringify(sets));
         }
+        pb.log.warn('Localization: localize is deprecated and will be removed in 1.0. Place your localizations in templates');
 
         //get i18n from storage
         var loc = Localization.storage;
         if (util.isNullOrUndefined(loc)) {
             throw new Error("Failed to set a language. LANG="+util.inspect(this.language));
         }
-        for (var key in loc.generic) {
-            var genericVal = this.g('generic' + Localization.KEY_SEP + key/*, {empty options}*/);
-            text = text.split('^loc_' + key + '^').join(genericVal);
-        }
 
-        for (var i = 0; i < sets.length; i++) {
-            for(var key in loc[sets[i]])  {
-                var setVal = this.g(sets[i] + Localization.KEY_SEP + key/*, {empty options}*/);
-                text = text.split('^loc_' + key + '^').join(loc[sets[i]][key]);
+        //to squeeze a little performance out of an outdated function we convert the sets to a quick lookup to reduce
+        // the number of comparisons necessary to see if we should even check for a localization
+        var self = this;
+        var superSets = ['generic'];
+        util.arrayPushAll(sets, superSets);
+        var setLookup = superSets.reduce(function(lookup, prefix) {
+            lookup[prefix] = true;
+            return lookup;
+        }, {});
+
+        text = Object.keys(Localization.storage).reduce(function(content, key) {
+
+            //look to see if the set even matches
+            var pieces = key.split('.');
+
+            //see if the set matches only when the set is in the lookup and when the key is nested (backward compatibility piece)
+            if (pieces.length === 1 || !setLookup[pieces[0]]) {
+                return content;
             }
-        }
+
+            var setVal = self.g(key/*, {empty options}*/);
+            return content.split('^loc_' + pieces[1] + '^').join(setVal);
+        }, text);
 
         // If the localization is for HTML output, load the localization into client side JS
-        if (text.indexOf('<body') > -1)  {
+        if (text.indexOf('<body') >= 0)  {
             text = text.concat(pb.ClientJs.includeJS(pb.UrlService.createSystemUrl('api/localization/script?locale=' + this.language, { hostname: hostname })));
         }
 
@@ -214,13 +221,13 @@ module.exports = function LocalizationModule(pb) {
      * situations where the key is found and the nuber of arguments passed to the
      * function is greater than 1.  See
      * http://nodejs.org/api/util.html#util_util_format_format for details on
-     * suppored formatting.
+     * supported formatting.
      * @deprecated Since 0.5.0
      * @method get
      * @param {String} key
-     * @param {String|Integer|Float|Object} [args] The variable number of
+     * @param {String|Integer|Number|Object} [args] The variable number of
      * parameters to be injected into the localization value
-     * @return {string} The formatted and localized string
+     * @return {string|null} The formatted and localized string
      */
     Localization.prototype.get = function() {
         var key = arguments[0];
@@ -234,16 +241,25 @@ module.exports = function LocalizationModule(pb) {
         }
 
         //create a key that can be converted over to what we need
-        var convertedKey;
-        if (!util.isNullOrUndefined(Localization.storage[key])) {
-            convertedKey = key;
-        }
-        else {
-            var topLevelKeys = Object.keys(Localization.storage);
-            for (var i = 0; i < topLevelKeys.length; i++) {
+        var convertedKey = key;
+        if (util.isNullOrUndefined(Localization.storage[key])) {
 
-                if (!util.isNullOrUndefined(Localization.storage[topLevelKeys[i]][key])) {
-                    convertedKey = topLevelKeys[i] + Localization.KEY_SEP + key;
+            //now we must loop over the keys to see if we were given only the second half of a localization key
+            //this is extremely inefficient and hence why the function is deprecated
+            var keys = Object.keys(Localization.storage);
+            for (var i = 0; i < keys.length; i++) {
+
+                //check to see if the the key is partitioned
+                var index = keys[i].indexOf('.');
+                if (index < 0) {
+                    continue;
+                }
+
+                //now we check to see if we were only given the second half of the localization key
+                if (keys[i].substr(index + 1) === key) {
+                    convertedKey = keys[i];
+
+                    pb.log.debug('Localization: Using the localization key %s is non-performant and should be updated to %s', key, convertedKey);
                     break;
                 }
             }
@@ -268,16 +284,14 @@ module.exports = function LocalizationModule(pb) {
      *
      * @method g
      * @param {String} key
-     * @param {Object} params
      * @param {Object} [options]
      * @param {String} [options.site=global]
      * @param {Object} [options.params={}]
      * @param {Object} [options.plugin]
      * @return {String}
      */
-    Localization.prototype.g = function() {
-        var key = arguments[0];
-        var options = arguments[1] || {
+    Localization.prototype.g = function(key, options) {
+        options = options || {
             site: pb.SiteService.GLOBAL_SITE,
             params: {}
         };
@@ -326,7 +340,7 @@ module.exports = function LocalizationModule(pb) {
 
             //check for plugin specific
             if (!util.isNullOrUndefined(keyBlock.__plugins)) {
-                var pluginsBlock = keyBlock.__plugins
+                var pluginsBlock = keyBlock.__plugins;
 
                 //check for active plugin first
                 if (!util.isNullOrUndefined(pluginsBlock[plugin])) {
@@ -358,7 +372,7 @@ module.exports = function LocalizationModule(pb) {
                 return processValue(keyBlock.__default);
             }
 
-            //counldn't find it in this block
+            //couldn't find it in this block
             return null;
         };
 
@@ -387,7 +401,7 @@ module.exports = function LocalizationModule(pb) {
                 return langResult;
             }
 
-            //we counldn't find it in this locale
+            //we couldn't find it in this locale
             return null;
         };
 
@@ -395,8 +409,8 @@ module.exports = function LocalizationModule(pb) {
             return util.isString(result) || options.defaultVal !== undefined ? result : key;
         };
 
-        //verify that key even exists
-        if (!Localization.keys[key]) {
+        //verify that key even exists, if not we're done.  Just send back the default val, if provided
+        if (!Localization.storage[key]) {
             return finalize(options.defaultVal);
         }
         else if (this.cache[key]) {
@@ -406,16 +420,9 @@ module.exports = function LocalizationModule(pb) {
         }
 
         //key create key path
-        var keyBlock = Localization.storage;
-        var parts = key.split(Localization.KEY_SEP);
-        for (var i = 0; i < parts.length; i++) {
-            if (util.isNullOrUndefined(keyBlock[parts[i]]) || !keyBlock[parts[i]].__isKey) {
-
-                //the key doesn't exist. Time to bail out
-                return finalize(options.defaultVal);
-            }
-
-            keyBlock = keyBlock[parts[i]];
+        var keyBlock = findKeyBlock(key, false);
+        if (!keyBlock) {
+            return null;
         }
 
         //we found the key.  Now we need to dig around and figure out which
@@ -446,7 +453,7 @@ module.exports = function LocalizationModule(pb) {
      * header in the request
      *
      * @method best
-     * @param {Object|String} request The request object
+     * @param {Request|String} request The request object
      * @param {Array} [supported] The array of supported locales
      * @return {string} Locale for the request
      */
@@ -475,7 +482,6 @@ module.exports = function LocalizationModule(pb) {
      */
     Localization.init = function(cb) {
         Localization.storage = {};
-        Localization.keys = {};
 
         //create path to localization directory
         var options = {
@@ -497,7 +503,7 @@ module.exports = function LocalizationModule(pb) {
                     obj = require(file);
                 }
                 catch(e) {
-                    pb.log.warn('Localization: Failed to load core localization file [%s]. %s', absolutePath, e.stack);
+                    pb.log.warn('Localization: Failed to load core localization file [%s]. %s', file, e.stack);
 
                     //we failed so skip this file
                     return;
@@ -507,7 +513,7 @@ module.exports = function LocalizationModule(pb) {
                 var localeObj = Localization.parseLocaleStr(file);
 
                 //register the localization as defaults (call private method)
-                compoundedResult &= Localization._registerLocale(localeObj, obj);
+                compoundedResult = compoundedResult && Localization._registerLocale(localeObj, obj);
             });
 
             //set the supported locales
@@ -535,7 +541,7 @@ module.exports = function LocalizationModule(pb) {
         var localeObj = Localization.parseLocaleStr(locale);
         locale = Localization.formatLocale(localeObj.language, localeObj.countryCode);
 
-        return Localization.supportedLookup[locale] ? true : false;
+        return !!Localization.supportedLookup[locale];
     };
 
     /**
@@ -552,20 +558,19 @@ module.exports = function LocalizationModule(pb) {
         }
 
         var ls = new Localization(locale);
-        var package = {};
-        var keys = Object.keys(Localization.keys);
-        keys.forEach(function(key) {
+        var packageObj = {};
+        Object.keys(Localization.storage).forEach(function(key) {
             var result = ls.g(key, options);
 
             var parts = key.split(Localization.KEY_SEP);
             if (parts.length === 1) {
-                package[key] = result;
+                packageObj[key] = result;
                 return;
             }
 
-            var block = package;
+            var block = packageObj;
             for (var i = 0; i < parts.length; i++) {
-                if (i == parts.length - 1) {
+                if (i === parts.length - 1) {
                     block[parts[i]] = result;
                     break;
                 }
@@ -575,7 +580,7 @@ module.exports = function LocalizationModule(pb) {
                 block = block[parts[i]];
             }
         });
-        return package;
+        return packageObj;
     };
 
     /**
@@ -584,6 +589,8 @@ module.exports = function LocalizationModule(pb) {
      * @method registerLocalizations
      * @param {String} locale
      * @param {Object} localizations
+     * @param {object} options
+     * @param {string} [options.plugin]
      * @return {Boolean}
      */
     Localization.registerLocalizations = function(locale, localizations, options) {
@@ -599,7 +606,7 @@ module.exports = function LocalizationModule(pb) {
      * @param {String|Object} locale
      * @param {Object} localizations
      * @param {Object} [options]
-     * @param {String} [options.string]
+     * @param {String} [options.plugin]
      * @return {Boolean}
      */
     Localization.registerLocale = function(locale, localizations, options) {
@@ -615,9 +622,11 @@ module.exports = function LocalizationModule(pb) {
      * @static
      * @method _registerLocale
      * @param {String|Object} locale
+     * @param {string} [locale.language] Only required when passing locale as an object
+     * @param {string} [locale.countryCode]
      * @param {Object} localizations
      * @param {Object} [options]
-     * @param {String} [options.string]
+     * @param {string} [options.plugin=SYSTEM]
      * @return {Boolean}
      */
     Localization._registerLocale = function(locale, localizations, options) {
@@ -632,7 +641,7 @@ module.exports = function LocalizationModule(pb) {
 
         //log it
         if (pb.log.isSilly()) {
-            pb.log.silly('Localization: Registering locale [%s] for plugin [%s]', Localization.formatLocale(locale.language, locale.countryCode), options.plugin ? options.plugin : 'SYSTEM');
+            pb.log.silly('Localization: Registering locale [%s] for plugin [%s]', Localization.formatLocale(locale.language, locale.countryCode), options.plugin || 'SYSTEM');
         }
 
         //load up top level keys into the queue
@@ -654,7 +663,7 @@ module.exports = function LocalizationModule(pb) {
                 processObj(item.key, item.val);
             }
             else if (util.isString(item.val)){
-                compoundedResult &= Localization._registerLocalization(locale, item.key, item.val, options);
+                compoundedResult = compoundedResult && Localization._registerLocalization(locale, item.key, item.val, options);
             }
             else {
                 compoundedResult = false;
@@ -693,7 +702,9 @@ module.exports = function LocalizationModule(pb) {
      * @private
      * @static
      * @method _registerLocalization
-     * @param {String} locale
+     * @param {String|object} locale
+     * @param {string} [locale.language] Only required when passing locale as an object
+     * @param {string} [locale.countryCode]
      * @param {String} key
      * @param {String} value
      * @param {Object} [options]
@@ -714,16 +725,10 @@ module.exports = function LocalizationModule(pb) {
             options = {};
         }
 
-        //parse the key
-        var keyParts = key.split(Localization.KEY_SEP);
-
         //ensure that the key path exists and set a reference to the block that
         //represents the key.  We are essentially walking the tree to get to
         //the key.  When a child node does not exist we create it.
-        var keyBlock = findKeyBlock(key);
-        if (keyBlock === null) {
-            return false;
-        }
+        var keyBlock = findKeyBlock(key, true);
 
         //ensure that the language block exists
         var langKey = k(locale.language);
@@ -732,7 +737,7 @@ module.exports = function LocalizationModule(pb) {
         }
         var insertionBlock = keyBlock[langKey];
 
-        //check to see if we need to move to a counry code block
+        //check to see if we need to move to a country code block
         if (util.isString(locale.countryCode)) {
 
             var countryKey = k(locale.countryCode);
@@ -757,10 +762,6 @@ module.exports = function LocalizationModule(pb) {
             insertionBlock.__default = valueBlock;
         }
 
-        //track the keys to know if they exist.  A performance boost in
-        //building localization packages, lookups, and removal from system.
-        Localization.keys[key] = true;
-
         return true;
     };
 
@@ -770,6 +771,8 @@ module.exports = function LocalizationModule(pb) {
      * @static
      * @method unregisterLocale
      * @param {String|Object} locale
+     * @param {string} [locale.language] Only required when locale is passed as an object
+     * @param {string} [locale.countryCode]
      * @param {Object} [options]
      * @param {String} [options.plugin]
      * @return {Boolean}
@@ -778,11 +781,14 @@ module.exports = function LocalizationModule(pb) {
         locale = parseLocale(locale);
 
         //iterate over all of the keys
-        var result = true;
-        Object.keys(Localization.keys).forEach(function(key) {
-            result &= Localization.unregisterLocalization(locale, key, options);
-        });
-        return result;
+        var keysRemoved = Object.keys(Localization.storage).reduce(function(prev, key) {
+            return prev + Localization.unregisterLocalization(locale, key, options);
+        }, 0);
+
+        //remove from quick lookup
+        delete Localization.supportedLookup[Localization.formatLocale(locale.language, locale.countryCode)];
+        Localization.supported = new Locale.Locales(Object.keys(Localization.supportedLookup));
+        return keysRemoved > 0;
     };
 
     /**
@@ -792,6 +798,8 @@ module.exports = function LocalizationModule(pb) {
      * @static
      * @method unregisterLocalization
      * @param {String|Object} locale
+     * @param {string} [locale.language] Only required when passing locale as an object
+     * @param {string} [locale.countryCode]
      * @param {String} key
      * @param {Object} [options]
      * @param {String} [options.plugin]
@@ -808,13 +816,13 @@ module.exports = function LocalizationModule(pb) {
         }
 
         //ensure that the key even exists
-        if (!util.isString(Localization.keys[key])) {
+        if (!Localization.storage[key]) {
             return false;
         }
 
         //walk the tree looking for the key
-        var keyBlock = findKeyBlock(key);
-        if (keyBlock === null) {
+        var keyBlock = findKeyBlock(key, false);
+        if (!keyBlock) {
             return false;
         }
 
@@ -829,12 +837,15 @@ module.exports = function LocalizationModule(pb) {
         //check for country
         if (util.isString(locale.countryCode)) {
 
+            //the lang block contains a key for the country code
             var countryKey = k(locale.countryCode);
             if (!util.isNullOrUndefined(langBlock[countryKey])) {
 
+                // look to see if a plugin was specified
                 var countryBlock = langBlock[countryKey];//translate to plugin key
                 if (util.isString(options.plugin)) {
 
+                    //the plugin was specified so we should check the country code block for a sub-section for the plugin
                     if (util.isString(countryBlock[options.plugin])) {
                         delete countryBlock[options.plugin];
                         return true;
@@ -845,8 +856,9 @@ module.exports = function LocalizationModule(pb) {
                 }
             }
 
-            if (util.isString(keyBlock[countryKey].__default)) {
-                delete keyBlock[countryKey].__default;
+            //no plugin so we should fall through to the default block
+            if (util.isObject(langBlock[countryKey].__default)) {
+                delete langBlock[countryKey].__default;
                 return true;
             }
             return false;
@@ -982,7 +994,9 @@ module.exports = function LocalizationModule(pb) {
      * and country code into an object.
      * @static
      * @method parseLocaleStr
-     * @param {String} filePath
+     * @param {String|object} filePath
+     * @param {string} [filePath.language] Only required when passing filePath as an object
+     * @param {string} [filePath.countryCode] Only required when passing filePath as an object
      * @return {Object}
      */
     Localization.parseLocaleStr = function(filePath) {
@@ -1017,7 +1031,7 @@ module.exports = function LocalizationModule(pb) {
         var countryCode = parts[1] ? parts[1].toUpperCase() : null;
         return {
             language: lang,
-            countryCode: countryCode,
+            countryCode: countryCode
         };
     };
 
@@ -1071,6 +1085,7 @@ module.exports = function LocalizationModule(pb) {
      * @static
      * @method parseLocale
      * @param {String|Object} locale
+     * @param {string} [locale.language] Only required when passing an object
      * @return {Object}
      */
     function parseLocale(locale) {
@@ -1109,31 +1124,14 @@ module.exports = function LocalizationModule(pb) {
      * @static
      * @method findKeyBlock
      * @param {String} key
+     * @param {boolean} create
      * @return {Object} The object that contains the values for the key
      */
-    function findKeyBlock(key) {
-
-        //parse the key
-        var keyParts = key.split(Localization.KEY_SEP);
-
-        //walk the tree looking for the storage structure
-        var keyBlock = Localization.storage;
-        keyParts.forEach(function(part) {
-            if (util.isNullOrUndefined(keyBlock[part])) {
-                keyBlock[part] = {
-                    __isKey: true
-                };
-            }
-            else if (!keyBlock[part].__isKey) {;
-
-                //bad news bears. They tried to provide a key in a protected
-                //namespace.  Basically all the things with "__" prefixes
-                return null;
-            }
-            keyBlock = keyBlock[part];
-        });
-
-        return keyBlock;
+    function findKeyBlock(key, create) {
+        if (create && typeof Localization.storage[key] === 'undefined') {
+            Localization.storage[key] = {};
+        }
+        return Localization.storage[key];
     }
 
     return Localization;

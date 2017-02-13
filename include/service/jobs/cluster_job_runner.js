@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('../../util.js');
@@ -103,11 +104,6 @@ module.exports = function ClusterJobRunnerModule(pb) {
      * for more details.
      */
     ClusterJobRunner.prototype.processResults = function(err, results, cb) {
-        if (util.isError(err)) {
-            cb(err, results);
-            return;
-        }
-
         //create function to handle cleanup and cb
         var self = this;
         var finishUp = function(err, result) {
@@ -120,6 +116,12 @@ module.exports = function ClusterJobRunnerModule(pb) {
             cb(err, result);
         };
 
+        //handle any error
+        if (util.isError(err)) {
+            return finishUp(err, results);
+        }
+
+        // decide how to process the result
         if (this.isInitiator) {
             this.processClusterResults(err, results, finishUp);
         }
@@ -204,7 +206,7 @@ module.exports = function ClusterJobRunnerModule(pb) {
                 }
                 callback(null, true);
             });
-        }
+        };
     };
 
     //exports

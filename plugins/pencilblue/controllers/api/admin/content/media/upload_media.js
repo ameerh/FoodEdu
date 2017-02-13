@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var fs         = require('fs');
@@ -21,12 +22,13 @@ var formidable = require('formidable');
 var async      = require('async');
 
 module.exports = function(pb) {
-    
+
     //pb dependencies
     var util = pb.util;
-    
+
     /**
      * Uploads a media file to the system
+     * @deprecated
      * @class UploadMediaController
      * @constructor
      */
@@ -41,7 +43,7 @@ module.exports = function(pb) {
         this.errored = 0;
     }
     util.inherits(UploadMediaController, pb.BaseController);
-    
+
     /**
      * Initializes the controller
      * @method init
@@ -73,9 +75,10 @@ module.exports = function(pb) {
         form.maxFieldSize = pb.config.media.max_upload_size;
         form.on('progress', function(bytesReceived, bytesExpected) {
             if (bytesReceived > pb.config.media.max_upload_size || bytesExpected > pb.config.max_upload_size) {
-                if (!self.errored++) {
-                    this.emit('error', new Error(self.ls.get('FILE_TOO_BIG')));
+                if (!self.errored) {
+                    this.emit('error', new Error(self.ls.g('media.FILE_TOO_BIG')));
                 }
+                self.errored++;
             }
         });
 
@@ -157,7 +160,7 @@ module.exports = function(pb) {
 
             //we only care about the passed in error
             if (util.isError(err)) {
-                var code = err.message === self.ls.get('FILE_TOO_BIG') ? 413 : 500;
+                var code = err.message === self.ls.g('media.FILE_TOO_BIG') ? 413 : 500;
                 return cb({content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, err.message), code: code});
             }
             cb(content);

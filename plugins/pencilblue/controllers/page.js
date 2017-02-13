@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
 
@@ -59,10 +60,8 @@ module.exports = function(pb) {
      * @param {Function} cb
      */
     PageViewController.prototype.render = function(cb) {
-
         var self    = this;
         var custUrl = this.pathVars.customUrl;
-
 
         //attempt to load object
         var opts = {
@@ -73,7 +72,7 @@ module.exports = function(pb) {
             if (util.isError(err)) {
                 return cb(err);
             }
-            else if (content == null) {
+            else if (content === null) {
                 return self.reqHandler.serve404();
             }
 
@@ -102,7 +101,6 @@ module.exports = function(pb) {
      * query to locate the article
      */
     PageViewController.prototype.getWhereClause = function(custUrl) {
-
 
         //put a check to look up by ID *FIRST*
         var conditions = [];

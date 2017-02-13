@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var NodeMailer = require('nodemailer');
@@ -32,12 +33,12 @@ module.exports = function EmailServiceModule(pb) {
      */
     function EmailService(options) {
         if (options) {
-            this.site = pb.SiteService.getCurrentSite(options.site) || pb.SiteService.GLOBAL_SITE;
+            this.site = pb.SiteService.getCurrentSite(options.site);
             this.onlyThisSite = options.onlyThisSite || false;
         }
     }
 
-    /** 
+    /**
      *
      * @private
      * @static
@@ -58,7 +59,7 @@ module.exports = function EmailServiceModule(pb) {
         username: '',
         password: ''
     });
-    
+
     /**
      * Retrieves a template and sends it as an email
      *
@@ -86,8 +87,8 @@ module.exports = function EmailServiceModule(pb) {
     /**
     * Uses an HTML layout and sends it as an email
     *
-    * @method sendFromTemplate
-    * @param {Object}   options Object containing the email settings and template name
+    * @method sendFromLayout
+    * @param {Object}   options Object containing the email settings and layout
     * @param {Function} cb      Callback function
     */
     EmailService.prototype.sendFromLayout = function(options, cb){
@@ -118,7 +119,7 @@ module.exports = function EmailServiceModule(pb) {
                 throw err;
             }
             else if (!emailSettings) {
-                var err = new Error('No Email settings available.  Go to the admin settings and put in SMTP settings');
+                err = new Error('No Email settings available.  Go to the admin settings and put in SMTP settings');
                 pb.log.error(err.stack);
                 return cb(err);
             }

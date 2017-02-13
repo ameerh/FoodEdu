@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,21 +14,21 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var fs      = require('fs');
 var path    = require('path');
 var cluster = require('cluster');
-var process = require('process');
 var util    = require('./util.js');
 var winston = require('winston');
 
 /**
  * Default configuration.  The settings here should be overriden by taking the
- * example file "sample.config.json" and modifying it to override the properties
+ * example file "config.js" and modifying it to override the properties
  * shown below.  In order to properly override the default configuration do the
  * following:
- * 1) copy "sample.config.json" to "/etc/pencilblue/config.json"
+ * 1) copy "config.js" to "/etc/pencilblue/config.js"
  * 2) Override the properties as desired.
  * 3) Add any custom properties you wish to provide for your specific purposes.
  * @class Configuration
@@ -105,7 +105,7 @@ Configuration.getBaseConfig = function(multisite) {
     return {
 
         //The name of the site.
-        siteName: 'footEducation',
+        siteName: 'pencilblue',
 
         //The root of the site.  This host part should ALWAYS match the value of
         //the siteIP
@@ -174,7 +174,7 @@ Configuration.getBaseConfig = function(multisite) {
             skip_index_check: false,
 
             //The indices that will be ensured by the system.  This list is checked
-            //at startup by every child process.  The override config.json file may
+            //at startup by every child process.  The override config.js file may
             //also provide this attribute.  In that case the items in that array
             //will be added to the those that already exist.  This attributes is generated
             //based on the multisite boolean setting.  NOTE: duplicates can
@@ -422,7 +422,7 @@ Configuration.getBaseConfig = function(multisite) {
  * the system.
  * @static
  * @method load
- * @param {Array|String} filePaths
+ * @param {Array|String} [filePaths]
  * @return {Object}
  */
 Configuration.load = function(filePaths) {

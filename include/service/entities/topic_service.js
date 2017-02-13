@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('../../util.js');
@@ -52,24 +53,24 @@ module.exports = function(pb) {
     /**
      *
      * @static
-     * @method
+     * @method format
      * @param {Object} context
-     * @param {TopicService} service An instance of the service that triggered
+     * @param {TopicService} context.service An instance of the service that triggered
      * the event that called this handler
      * @param {Function} cb A callback that takes a single parameter: an error if occurred
      */
     TopicService.format = function(context, cb) {
         var dto = context.data;
-        dto.name = pb.BaseController.sanitize(dto.name);
+        dto.name = BaseObjectService.sanitize(dto.name);
         cb(null);
     };
 
     /**
      *
      * @static
-     * @method
+     * @method merge
      * @param {Object} context
-     * @param {TopicService} service An instance of the service that triggered
+     * @param {TopicService} context.service An instance of the service that triggered
      * the event that called this handler
      * @param {Function} cb A callback that takes a single parameter: an error if occurred
      */

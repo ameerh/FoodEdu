@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('./util.js');
@@ -35,7 +36,7 @@ module.exports = function ClientJsModule(pb) {
      * @method getAngularController
      * @param {Object} objects     Object to be passed into AngularJS scope
      * @param {Array}  modules     Array of AngularJS module names
-     * @param {String} directiveJS JavaScript to run after on-finish-render directive
+     * @param {String} [directiveJS] JavaScript to run after on-finish-render directive
      */
     ClientJs.getAngularController = function(objects, modules, directiveJS) {
         if(!util.isArray(modules) || modules.length === 0) {
@@ -44,12 +45,12 @@ module.exports = function ClientJsModule(pb) {
 
         var angularController = 'var pencilblueApp = angular.module("pencilblueApp", ' + JSON.stringify(modules) + ')';
         if(!util.isNullOrUndefined(directiveJS)) {
-            angularController += '.directive("onFinishRender", function($timeout){return {restrict: "A",link: function(scope, element, attr){if (scope.$last === true){$timeout(function(){' + directiveJS + '})}}}})';
+            angularController += '.directive("onFinishRender", function($timeout) {return {restrict: "A", link: function(scope, element, attr) {if (scope.$last === true){$timeout(function() {' + directiveJS + '})}}}})';
         }
 
         var scopeString = ClientJs.getAngularObjects(objects);
         angularController = angularController.concat('.controller("PencilBlueController", function($scope, $sce) {' + scopeString + "});\n");
-        angularController = angularController.concat('pencilblueApp.config(["$compileProvider",function(e){e.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/)}]);');
+        angularController = angularController.concat('pencilblueApp.config(["$compileProvider",function(e) {e.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/)}]);');
         return ClientJs.getJSTag(angularController);
     };
 
@@ -58,20 +59,20 @@ module.exports = function ClientJsModule(pb) {
      * @static
      * @method getAngularObjects
      * @param {Object} objects
-     * @return {String} 
+     * @return {String}
      */
     ClientJs.getAngularObjects = function(objects) {
         var scopeString = '';
-        for(var key in objects) {
-            if(util.isString(objects[key]) && objects[key].indexOf('function(') == 0) {
+        Object.keys(objects).forEach(function(key) {
+            if(util.isString(objects[key]) && objects[key].indexOf('function(') === 0) {
                 scopeString = scopeString.concat('$scope.' + key + ' = ' + objects[key] + ";\n");
-                continue;
+                return;
             }
-            scopeString = scopeString.concat('$scope.' + key + '=' + JSON.stringify(objects[key], null, pb.log.isSilly() ? ' ' : undefined) + ";\n");
-        }
+            scopeString = scopeString.concat('$scope.' + key + ' = ' + JSON.stringify(objects[key], null, pb.log.isSilly() ? ' ' : undefined) + ";\n");
+        });
 
         return scopeString;
-    }
+    };
 
     /**
      * Creates a JS tag that loads the specified url

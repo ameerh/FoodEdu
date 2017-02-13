@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2015  PencilBlue, LLC
+ Copyright (C) 2016  PencilBlue, LLC
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ module.exports = function(pb) {
             if (util.isError(err)) {
                 return cb(err);
             }
-            else if (article == null) {
+            else if (article === null) {
                 return self.reqHandler.serve404();
             }
 

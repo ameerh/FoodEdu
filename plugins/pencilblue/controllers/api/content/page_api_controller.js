@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,14 +14,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
 
     //PB dependencies
     var util            = pb.util;
     var PageService     = pb.PageService;
-    var SecurityService = pb.SecurityService;
-    var UserService     = pb.UserService;
 
     /**
      *
@@ -34,26 +33,19 @@ module.exports = function(pb) {
 
     /**
      * Initializes the controller
-     * @method init
+     * @method initSync
      * @param {Object} context
-     * @param {Function} cb
      */
-    PageApiController.prototype.init = function(context, cb) {
-        var self = this;
-        var init = function(err) {
+    PageApiController.prototype.initSync = function(/*context*/) {
 
-            /**
-             *
-             * @property service
-             * @type {ArticleServiceV2}
-             */
-            self.service = new PageService(self.getServiceContext());
-
-            cb(err, true);
-        };
-        PageApiController.super_.prototype.init.apply(this, [context, init]);
+        /**
+         *
+         * @property service
+         * @type {ArticleServiceV2}
+         */
+        this.service = new PageService(this.getServiceContext());
     };
-    
+
     /**
      * Process the generic API options as well as the page specific "render" option
      * @method processQuery
@@ -63,7 +55,7 @@ module.exports = function(pb) {
         var options = PageApiController.super_.prototype.processQuery.apply(this);
         options.render = !!this.query.render; //pass 1 for true, 0 or nothing for false
         if (options.render) {
-            options.renderBylines = true
+            options.renderBylines = true;
         }
         return options;
     };
@@ -87,9 +79,23 @@ module.exports = function(pb) {
             where = {
                 $or: [
                     {headline: pattern},
-                    {subheading: pattern},
+                    {subheading: pattern}
                 ]
             };
+        }
+
+        //search by topic
+        var topicId = q.topic;
+        if (pb.ValidationService.isIdStr(topicId, true)) {
+            where = where || {};
+            where.page_topics = topicId;
+        }
+
+        //search by author
+        var authorId = q.author;
+        if (pb.ValidationService.isIdStr(authorId, true)) {
+            where = where || {};
+            where.author = authorId;
         }
 
         return {

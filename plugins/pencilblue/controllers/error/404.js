@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,12 +14,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var path = require('path');
 
 module.exports = function NotFoundControllerModule(pb) {
-    
+
     //pb dependencies
     var util    = pb.util;
     var TopMenu = pb.TopMenuService;
@@ -32,7 +33,7 @@ module.exports = function NotFoundControllerModule(pb) {
      */
     function NotFoundController(){}
     util.inherits(NotFoundController, pb.ErrorViewController);
-    
+
     /**
      * Initializes the controller
      * @method init
@@ -42,7 +43,7 @@ module.exports = function NotFoundControllerModule(pb) {
     NotFoundController.prototype.init = function(context, cb) {
         var self = this;
         var init = function(err, result) {
-            
+
             //force the page name & status
             self.status = 404;
             self.setPageName(self.ls.g('error.PAGE_NOT_FOUND'));
@@ -52,7 +53,7 @@ module.exports = function NotFoundControllerModule(pb) {
         };
         NotFoundController.super_.prototype.init.apply(this, [context, init]);
     };
-    
+
     /**
      * @method getErrorMessage
      * @return {String}
@@ -60,7 +61,7 @@ module.exports = function NotFoundControllerModule(pb) {
     NotFoundController.prototype.getErrorMessage = function() {
         return this.ls.g('error.PAGE_NOT_FOUND');
     };
-    
+
     /*
      * @method getTemplatePath
      * @return {String}

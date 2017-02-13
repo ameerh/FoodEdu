@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('../util.js');
@@ -253,7 +254,7 @@ module.exports = function SettingsModule(pb) {
 
         //validate key is not taken
         var where = { key: new RegExp('^' + util.escapeRegExp(obj.key) + '$', 'i') };
-        context.service.dao.exists(TYPE, where, function(err, exists) {console.log(context);
+        context.service.dao.exists(TYPE, where, function(err, exists) {
             if (exists && context.isCreate) {
                 errors.push(pb.BaseObjectService.validationFailure('key', 'key already exists'));
             }

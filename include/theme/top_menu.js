@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var async = require('async');
@@ -83,7 +84,14 @@ module.exports = function TopMenuServiceModule(pb) {
                 }
             };
             async.parallel(tasks, function(err, result) {
-                cb(result.themeSettings, result.formattedSections, result.accountButtons);
+                if (util.isError(err)) {
+                    pb.log.error('TopMenuService: Ignored error occurred: %s', err);
+                }
+
+                // the default for account buttons was added as part of #970.
+                // It allows for error page to be shown when something goes wrong with setup page.
+                // Will be fixed and corrected in [1.0] where errors will not be ignored
+                cb(result.themeSettings, result.formattedSections, result.accountButtons || []);
             });
         };
         getTopMenu(session, localizationService, options, cb);
@@ -245,9 +253,9 @@ module.exports = function TopMenuServiceModule(pb) {
      * @method getNavItems
      * @param {Object} options
      * @param {Localization} options.ls
-     * @param {String} options.activeTheme
      * @param {Object} options.session
      * @param {String} options.currUrl
+     * @param {string} options.site
      * @param {Function} cb
      */
     TopMenuService.prototype.getNavItems = function(options, cb) {

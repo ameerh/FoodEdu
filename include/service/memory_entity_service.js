@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('../util.js');
@@ -135,7 +136,7 @@ module.exports = function MemoryEntityServiceModule(pb) {
         }
 
         //value not found
-        if (rawVal == null) {
+        if (rawVal === null) {
             return null;
         }
 
@@ -152,7 +153,7 @@ module.exports = function MemoryEntityServiceModule(pb) {
      */
     function getCorrectValueField(rawVal, valueField) {
         var value = null;
-        if (valueField == null) {
+        if (valueField === null) {
             value = rawVal;
         }
         else {
@@ -190,16 +191,16 @@ module.exports = function MemoryEntityServiceModule(pb) {
     MemoryEntityService.prototype._set = function(key, value, cb) {
         var rawValue = null;
         var internalKey = MemoryEntityService.getKey(key, this.site, this.objType);
-        if (STORAGE.hasOwnProperty(internalKey)) {
+        if (STORAGE[internalKey]) {
             rawValue = STORAGE[internalKey];
-            if (this.valueField == null) {
+            if (this.valueField === null) {
                 rawValue = value;
             }
             else {
                 rawValue[this.valueField] = value;
             }
         }
-        else if (this.valueField == null){
+        else if (this.valueField === null){
             rawValue = value;
         }
         else{
@@ -292,7 +293,6 @@ module.exports = function MemoryEntityServiceModule(pb) {
      * key/value pairs within the registered instance
      * @static
      * @method
-     * @param {String} objType The type of object being referenced
      * @return {String} The command type to be registered for
      */
     MemoryEntityService.getOnChangeType = function() {

@@ -1,4 +1,4 @@
-[![dependencies](https://david-dm.org/pencilblue/pencilblue.png)](https://david-dm.org/pencilblue/pencilblue) [![Coverage Status](https://coveralls.io/repos/pencilblue/pencilblue/badge.svg?branch=master)](https://coveralls.io/r/pencilblue/pencilblue?branch=master) [![Build Status](https://travis-ci.org/pencilblue/pencilblue.svg?branch=master)](https://travis-ci.org/pencilblue/pencilblue) [![Code Climate](https://codeclimate.com/github/pencilblue/pencilblue/badges/gpa.svg)](https://codeclimate.com/github/pencilblue/pencilblue) [![bitHound Overall Score](https://www.bithound.io/github/pencilblue/pencilblue/badges/score.svg)](https://www.bithound.io/github/pencilblue/pencilblue) [![Join the chat at https://gitter.im/pencilblue/pencilblue](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pencilblue/pencilblue?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![dependencies](https://david-dm.org/pencilblue/pencilblue.png)](https://david-dm.org/pencilblue/pencilblue) [![Coverage Status](https://coveralls.io/repos/pencilblue/pencilblue/badge.svg?branch=master)](https://coveralls.io/r/pencilblue/pencilblue?branch=master) [![Build Status](https://travis-ci.org/pencilblue/pencilblue.svg?branch=master)](https://travis-ci.org/pencilblue/pencilblue) [![bitHound Overall Score](https://www.bithound.io/github/pencilblue/pencilblue/badges/score.svg)](https://www.bithound.io/github/pencilblue/pencilblue) [![Join the chat at https://gitter.im/pencilblue/pencilblue](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pencilblue/pencilblue?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [PencilBlue](http://pencilblue.org)
 =====
@@ -26,7 +26,7 @@ Installation
 
 [![LAUNCH ON OpenShift](http://launch-shifter.rhcloud.com/launch/LAUNCH ON.svg)](https://hub.openshift.com/quickstarts/deploy/159-pencilblue)
 
-The instructions below assume that Node.js [0.11, 5) and MongoDB [2, 3) are installed on your machine. If they are not then please visit http://nodejs.org and http://www.mongodb.org to install them.
+The instructions below assume that Node.js [0.11, 6] and MongoDB [2, 3) are installed on your machine. If they are not then please visit http://nodejs.org and http://www.mongodb.org to install them.
 
 ##### PencilBlue Command-line interface
  1. Install the pencilblue-cli module: ```sudo npm install -g pencilblue-cli```
@@ -40,7 +40,7 @@ The instructions below assume that Node.js [0.11, 5) and MongoDB [2, 3) are inst
  2. ```cd``` into the cloned repository's folder
  3. Run ```npm install``` to retrieve PencilBlue's dependencies. Depending on your system access privileges, you may have to run  ```sudo npm install```
  4. (Optional) Install [Redis](http://redis.io/) for caching
- 5. (Optional) Create a custom configuration file using the provided ```sample.config.json```. The file can reside in two places: within the root folder of your installation as ```config.json``` or at ```/etc/pencilblue/config.json```. The installation root takes precedence. If running all services locally, no configuration file is needed, but a configuration file is necessary for overriding specific settings.
+ 5. (Optional) Create a custom configuration file using the provided ```config.js```. The file can reside in two places: within the root folder of your installation as ```config.js``` or at ```/etc/pencilblue/config.js```. The installation root takes precedence. If running all services locally, no configuration file is needed, but a configuration file is necessary for overriding specific settings.
  6. Start PencilBlue. You can simply run ```node pencilblue```, but we recommend using [nodemon](https://www.npmjs.org/package/nodemon) for development and [forever](https://www.npmjs.org/package/forever) for production. Nodemon will restart PencilBlue on file changes and forever will ensure that PencilBlue is always running.
  ```
  # development
@@ -49,7 +49,7 @@ The instructions below assume that Node.js [0.11, 5) and MongoDB [2, 3) are inst
  OR
 
  # production
- sudo forever start footeducation.js
+ sudo forever start pencilblue.js
  ```
  7. Navigate to the site root you specified in a configuration file or http://localhost:8080 by default.
 

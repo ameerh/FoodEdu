@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 module.exports = function(pb) {
 
@@ -44,7 +45,7 @@ module.exports = function(pb) {
         if(message) {
             return cb({
                 code: 400,
-                content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, message)
+                content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, message)
             });
         }
 
@@ -53,7 +54,7 @@ module.exports = function(pb) {
             if(util.isError(err) || media === null) {
                 return cb({
                     code: 400,
-                    content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, self.ls.g('generic.INVALID_UID'))
+                    content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, self.ls.g('generic.INVALID_UID'))
                 });
             }
 
@@ -66,11 +67,11 @@ module.exports = function(pb) {
                 if(util.isError(err) || util.isArray(result)) {
                     return cb({
                         code: 500,
-                        content: pb.BaseController.apiResponse(pb.BaseController.API_ERROR, self.ls.g('generic.ERROR_SAVING'))
+                        content: pb.BaseController.apiResponse(pb.BaseController.API_FAILURE, self.ls.g('generic.ERROR_SAVING'))
                     });
                 }
 
-                result.icon = pb.MediaService.getMediaIcon(media.media_type);
+                result.icon = pb.MediaServiceV2.getMediaIcon(media.media_type);
                 cb({content: pb.BaseController.apiResponse(pb.BaseController.API_SUCCESS, media.name + ' ' + self.ls.g('admin.EDITED'), result)});
             });
         });

@@ -6,27 +6,25 @@
  *
  * The file can be renamed to "config.js" in the same directory as this file
  * and it will be used as the configuration when PencilBlue is started.  If
- * this file is used then there is no need to create a "config.json"
+ * this file is used then there is no need to create a "config.js"
  */
 
 module.exports = {
-    "siteName": "footeducation",
-    "siteRoot": "https://footeducation.us-east-1.elasticbeanstalk.com",
-    //"siteRoot": "http://localhost:8080",
-    "sitePort": process.env.PORT,
+    "siteName": "Foot Education",
+    "siteRoot": "http://localhost:8080",
+    "sitePort": 8080,
     "logging": {
-        "level": "info"
+        "level": "silly"
     },
     "db": {
-        "type": "mongo",
+        "type":"mongo",
         "servers": [
-            //LOCAL
-            //"mongodb://127.0.0.1:27017/"
-            //"mongodb: http://52.38.184.71/footeducation"
-            "mongodb://footeducation:Jan12017@ds133549-a1.mlab.com:33549/footeducation"
+            //"127.0.0.1:27017"
+            'mongodb://footeducation:Jan12017@ds133549-a0.mlab.com:33549'
         ],
         "name": "footeducation",
-        "writeConcern": 1
+        "writeConcern": 1,
+        query_logging: false
     },
     "cache": {
         "fake": true,
@@ -48,23 +46,26 @@ module.exports = {
         }
     },
     "registry": {
-        "type": "mongo"
+        "type": "redis"
     },
     "session": {
         "storage": "mongo"
     },
     "media": {
         "provider": "mongo",
-        "max_upload_size": 6291456
+        "max_upload_size": 6 * 1024 * 1024
     },
+
+    /*"media": {
+        "provider": "/plugins/s3-pencilblue/include/s3_media_provider.js"
+
+    },*/
     "cluster": {
         "workers": 1,
-        "self_managed": true
+        "self_managed": false
     },
-    "multisite": {
-        "enabled": false,
-        "globalRoot": "http://global.localhost:8080"
-    },
-    "siteIP": "0.0.0.0"
+    multisite: {
+        enabled: false,
+        globalRoot: 'http://global.localhost:8080'
+    }
 };
-

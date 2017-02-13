@@ -170,11 +170,14 @@ module.exports = {
         ERROR_SETTING_ACTIVE_THEME: 'An error occurred while attempting to set the active theme',
         ERROR_SETTING_CONTENT_SETTINGS: 'An error occurred while attempting to set the default content settings',
         ERROR_SETTING_SYS_INITIALIZED: 'An error occurred while attempting to set the system initialized setting',
-        ERROR_SETTING_CALLHOME: 'An error occurred while attempting to set the system reporting preference'
+        ERROR_SETTING_CALLHOME: 'An error occurred while attempting to set the system reporting preference',
+        OK: "OK",
+        DEFAULT_LOCALE: "Default Locale"
     },
     error: {
     	ERROR: 'Error',
-        PAGE_NOT_FOUND: 'The page can not be found'
+        PAGE_NOT_FOUND: 'The page can not be found',
+        NOT_AUTHORIZED: 'Not Authorized'
     },
     timestamp: {
         JAN: 'January',
@@ -282,7 +285,8 @@ module.exports = {
         UPLOAD_IMAGE: 'Upload image',
         IMAGE_URL: 'Image URL',
         IMAGE_URL_PLACEHOLDER: '.jpg, .png, .gif, or .svg',
-        FILE_TOO_BIG: 'The file is larger than the allowed limit'
+        FILE_TOO_BIG: 'The file is larger than the allowed limit',
+        DRAG_DROP_IMG_VID: 'Drop image and video files here'
     },
     pages: {
         MANAGE_PAGES: 'Manage pages',
@@ -471,7 +475,7 @@ module.exports = {
     },
     site_settings:  {
         CONFIGURATION: 'Configuration',
-        EDIT_CONFIGURATION: 'To edit the configuration, create a config.json file in the root directory',
+        EDIT_CONFIGURATION: 'To edit the configuration, create a config.js file in the root directory',
         SITE_NAME: 'Site name',
         SITE_ROOT: 'Site root',
         MEDIA_ROOT: 'Media root',

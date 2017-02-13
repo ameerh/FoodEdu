@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var path        = require('path');
@@ -34,10 +35,10 @@ module.exports = function(pb) {
      *
      * @class TemplateService
      * @constructor
-     * @module Services
-     * @submodule Entities
-     * @param {Object} [localizationService] The localization service object
-     * @param {String} siteUid context site for this service
+     * @param {Object} opts The localization service object
+     * @param {Localization} opts.ls
+     * @param {string} opts.activeTheme
+     * @param {string} opts.site
      */
     function TemplateService(opts){
         var localizationService;
@@ -126,7 +127,7 @@ module.exports = function(pb) {
 
         /**
          * @property settingService
-         * @type {SettingService}
+         * @type {SimpleLayeredService}
          */
         this.settingService = pb.SettingServiceFactory.getServiceBySite(this.siteUid);
 
@@ -144,8 +145,6 @@ module.exports = function(pb) {
     var TEMPLATE_PREFIX_LEN     = TEMPLATE_PREFIX.length;
     var LOCALIZATION_PREFIX     = 'loc_';
     var LOCALIZATION_PREFIX_LEN = LOCALIZATION_PREFIX.length;
-    var SYSTEM_PREFIX           = 'system_';
-    var SYSTEM_PREFIX_LEN       = SYSTEM_PREFIX.length;
 
     var TEMPLATE_LOADER = null;
 
@@ -236,6 +235,20 @@ module.exports = function(pb) {
     };
 
     /**
+     * returns the value associated with a registered local key(flag)
+     *
+     * @method getRegisteredLocal
+     * @param {string} flag The flag name to map to the value when encountered in a
+     * template.
+     * @return {*} the callback or the value that was assigned
+     * to that local if the flag exists.  If not, it will return null
+     */
+    TemplateService.prototype.getRegisteredLocal = function(flag) {
+        return this.localCallbacks[flag] || null;
+    };
+
+
+    /**
      * When a flag is encountered that is not registered with the engine the
      * handler is called as a fail safe.  It is expected to return a string that
      * will be put in the place of the flag.
@@ -279,7 +292,7 @@ module.exports = function(pb) {
      * @param {Boolean} reprocess
      */
     TemplateService.prototype.setReprocess = function(reprocess) {
-        this.reprocess = reprocess ? true : false;
+        this.reprocess = !!reprocess;
     };
 
     /**
@@ -316,7 +329,6 @@ module.exports = function(pb) {
 
         //build set of paths to search through
         var paths = [];
-        var themePath = null;
         var hintedTheme = this.getTheme();
         if (hintedTheme && !TemplateService.isTemplateBlacklisted(hintedTheme, relativePath)) {
             paths.push({
@@ -346,7 +358,7 @@ module.exports = function(pb) {
                 }
             }
 
-            //now add the defalt if appropriate
+            //now add the default if appropriate
             if (!TemplateService.isTemplateBlacklisted(pb.config.plugins.default, relativePath)) {
                 paths.push({
                     plugin: pb.config.plugins.default,
@@ -355,22 +367,22 @@ module.exports = function(pb) {
             }
 
             //iterate over paths until a valid template is found
-            var i        = 0;
+            var j        = 0;
             var doLoop   = true;
             var template = null;
             async.whilst(
-                function(){return i < paths.length && doLoop;},
+                function(){return j < paths.length && doLoop;},
                 function(callback) {
 
                     //attempt to load template
-                    TEMPLATE_LOADER.get(paths[i].path, function(err, templateData) {
+                    TEMPLATE_LOADER.get(paths[j].path, function(err, templateData) {
                         template = templateData;
                         doLoop   = util.isError(err) || !util.isObject(template);
                         if (doLoop) {
-                            TemplateService.blacklistTemplate(paths[i].plugin, relativePath);
+                            TemplateService.blacklistTemplate(paths[j].plugin, relativePath);
                         }
 
-                        i++;
+                        j++;
                         callback();
                     });
                 },
@@ -494,7 +506,7 @@ module.exports = function(pb) {
             else if ((tmp = GLOBAL_CALLBACKS[flag]) !== undefined) {//global callbacks
                 return self.handleReplacement(flag, tmp, cb);
             }
-            else if (flag.indexOf(LOCALIZATION_PREFIX) == 0 && self.localizationService) {//localization
+            else if (flag.indexOf(LOCALIZATION_PREFIX) === 0 && self.localizationService) {//localization
 
                 //TODO how do we express params?  Other template vars?
                 var key = flag.substring(LOCALIZATION_PREFIX_LEN);
@@ -507,16 +519,15 @@ module.exports = function(pb) {
                 var val = self.localizationService.g(key, opts);
                 if (!util.isString(val)) {
 
-                    //TODO this is here to be backwards compatible. Remove in 0.6.0
+                    //TODO this is here to be backwards compatible. Remove in 1.0
                     val = self.localizationService.get(key);
                 }
                 return cb(null, val);
             }
-            else if (flag.indexOf(TEMPLATE_PREFIX) == 0) {//sub-templates
+            else if (flag.indexOf(TEMPLATE_PREFIX) === 0) {//sub-templates
                 self.handleTemplateReplacement(flag, function(err, template) {
                     cb(null, template);
                 });
-                return;
             }
             else {
 
@@ -568,7 +579,7 @@ module.exports = function(pb) {
      *
      * @method handleReplacement
      * @param {string} flag The flag to transform
-     * @param {mixed} replacement The value can either be a function to handle the
+     * @param {*} replacement The value can either be a function to handle the
      * replacement or a value.
      * @param {function} cb Callback function
      */
@@ -580,7 +591,7 @@ module.exports = function(pb) {
             if (content instanceof TemplateValue) {
                 content = content.val();
             }
-            else if (util.isObject(content) || util.isString(content)){;
+            else if (util.isObject(content) || util.isString(content)){
                 content = HtmlEncoder.htmlEncode(content.toString());
             }
 
@@ -611,7 +622,7 @@ module.exports = function(pb) {
      * @method registerLocal
      * @param {string} flag The flag name to map to the value when encountered in a
      * template.
-     * @param {mixed} callbackFunctionOrValue The function to execute to perform the
+     * @param {*} callbackFunctionOrValue The function to execute to perform the
      * transformation or the value to substitute in place of the flag.
      * @return {Boolean} TRUE when registered successfully, FALSE if not
      */
@@ -661,7 +672,6 @@ module.exports = function(pb) {
             var flag = (prefix ? prefix + '.' : prefix) + key;
             if (util.isObject(value) && !(value instanceof TemplateValue)) {
 
-                var result = true;
                 util.forEach(value, function(value, key) {
                     queue.push({
                         key: key,
@@ -678,14 +688,13 @@ module.exports = function(pb) {
         var completedResult = true;
         while (queue.length > 0 && completedResult) {
             var item = queue.shift();
-            completedResult &= register(item.prefix, item.key, item.value);
-        };
+            completedResult = completedResult && register(item.prefix, item.key, item.value);
+        }
         return completedResult;
     };
 
     /**
      * Retrieves the content template names and locations for the active theme.
-     *
      * @method getTemplatesForActiveTheme
      * @param {function} cb A call back that provides two parameters: cb(err, [{templateName: templateLocation])
      */
@@ -693,7 +702,7 @@ module.exports = function(pb) {
         var self = this;
         this._getActiveTheme(function(err, activeTheme) {
 
-            if(util.isError(err) || activeTheme == null) {
+            if(util.isError(err) || activeTheme === null) {
                 cb(err, []);
                 return;
             }
@@ -722,12 +731,7 @@ module.exports = function(pb) {
 
                 var templates = [];
                 if (plugin && plugin.theme && plugin.theme.content_templates) {
-
-                    for (var j = 0; j < plugin.theme.content_templates.length; j++) {
-
-                        var template = plugin.theme.content_templates[j];
-                        templates.push(template);
-                    }
+                    util.arrayPushAll(plugin.theme.content_templates, templates);
                 }
                 cb(err, templates);
             });
@@ -743,7 +747,8 @@ module.exports = function(pb) {
 
         var opts = {
             ls: this.localizationService,
-            activeTheme: this.activeTheme
+            activeTheme: this.activeTheme,
+            site: this.siteUid
         };
         var childTs                     = new TemplateService(opts);
         childTs.theme                   = this.theme;
@@ -759,7 +764,7 @@ module.exports = function(pb) {
      * @method isFlag
      * @param {String} content
      * @param {String} flag
-     * @return {String}
+     * @return {boolean}
      */
     TemplateService.isFlag = function(content, flag) {
         return util.isString(content) && (content.length === 0 || ('^'+flag+'^') === content);
@@ -791,9 +796,9 @@ module.exports = function(pb) {
      *
      * @static
      * @method registerGlobal
-     * @param {string} flag The flag name to map to the value when encountered in a
+     * @param {string} key The flag name to map to the value when encountered in a
      * template.
-     * @param {mixed} callbackFunctionOrValue The function to execute to perform the
+     * @param {*} callbackFunctionOrValue The function to execute to perform the
      * transformation or the value to substitute in place of the flag.
      * @return {Boolean} TRUE when registered successfully, FALSE if not
      */
@@ -821,6 +826,7 @@ module.exports = function(pb) {
      *
      * @static
      * @method getCustomPath
+     * @param {string} themeName
      * @param {string} templateLocation
      * @return {string} The absolute path
      */
@@ -842,14 +848,14 @@ module.exports = function(pb) {
      * @return {Array} The array template parts
      */
     TemplateService.compile = function(text, start, end) {
-        if (!pb.validation.validateNonEmptyStr(text, true)) {
+        if (!pb.ValidationService.isNonEmptyStr(text, true)) {
             pb.log.warn('TemplateService: Cannot parse the content because it is not a valid string: '+text);
             return [];
         }
-        if (!pb.validation.validateNonEmptyStr(start, true)) {
+        if (!pb.ValidationService.isNonEmptyStr(start, true)) {
             start = '^';
         }
-        if (!pb.validation.validateNonEmptyStr(end, true)) {
+        if (!pb.ValidationService.isNonEmptyStr(end, true)) {
             end = '^';
         }
 
@@ -862,10 +868,8 @@ module.exports = function(pb) {
         };
 
         var i;
-        var pipe      = 0;
         var flag      = null;
-        var static    = null;
-        var flagFound = 0;
+        var staticContent = null;
         var compiled  = [];
         while ( (i = text.indexOf(start)) >= 0) {
 
@@ -875,11 +879,11 @@ module.exports = function(pb) {
 
                 //determine precursing static content & flag
                 flag   = text.substring(start_pos, end_pos);
-                static = text.substring(0, start_pos - start.length);
+                staticContent = text.substring(0, start_pos - start.length);
 
                 //add the static content
-                if (static) {
-                    compiled.push(genPiece(TEMPLATE_PIECE_STATIC, static));
+                if (staticContent) {
+                    compiled.push(genPiece(TEMPLATE_PIECE_STATIC, staticContent));
                 }
 
                 //add the flag
@@ -938,15 +942,15 @@ module.exports = function(pb) {
      * instructions.
      * @class TemplateValue
      * @constructor
-     * @param {String} The raw value to be included in the template processing
+     * @param {String} {val} The raw value to be included in the template processing
      * @param {Boolean} [htmlEncode=true] Indicates if the value should be
      * encoded during serialization.
      */
-    function TemplateValue(val, htmlEncode){
+    function TemplateValue(val, htmlEncode) {
 
         this.raw        = val;
         this.htmlEncode = util.isBoolean(htmlEncode) ? htmlEncode : true;
-    };
+    }
 
     /**
      * Encodes the value for an HTML document when a value is provided.
@@ -955,7 +959,7 @@ module.exports = function(pb) {
      * @return {Boolean} The current value of the htmlEncode property
      */
     TemplateValue.prototype.encode = function(doHtmlEncoding) {
-        if (doHtmlEncoding == true || doHtmlEncoding == false) {
+        if (doHtmlEncoding === true || doHtmlEncoding === false) {
             this.htmlEncode = doHtmlEncoding;
         }
         return this.htmlEncode;

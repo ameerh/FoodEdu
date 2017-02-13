@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('../util.js');
@@ -59,7 +60,7 @@ module.exports = function TemplateEntityService(pb) {
 
             //compile the content
             var structure = null;
-            if (pb.validation.validateNonEmptyStr(content, true)) {
+            if (pb.validation.isNonEmptyStr(content, true)) {
                 structure = {
                     key: key,
                     parts: pb.TemplateService.compile(content, self.startMarker, self.endMarker)

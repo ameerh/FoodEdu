@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,13 +14,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var fs   = require('fs');
 var util = require('../util.js');
 
 module.exports = function JSONFSEntityServiceModule(pb) {
-    
+
     /**
      * JSON file system storage service
      *
@@ -57,7 +58,7 @@ module.exports = function JSONFSEntityServiceModule(pb) {
             catch(e) {
                 var error = util.format("%s: Failed to parse JSON from file: %s", this.type, key);
                 pb.log.error(error);
-                cb(new PBError(error).setSource(e));
+                cb(new pb.PBError(error).setSource(e)); // PBError class necessary?
             }
         };
         JSONFSEntityService.super_.prototype.render.apply([this, key, handler]);
@@ -73,7 +74,7 @@ module.exports = function JSONFSEntityServiceModule(pb) {
      */
     JSONFSEntityService.prototype.set = function(key, value, cb) {
         if (!util.isObject(value) && !util.isArray(value)) {
-            cb(new PBError(this.type+": Value must be an array or object: "+util.inspect(value)), null);
+            cb(new pb.PBError(this.type+": Value must be an array or object: "+util.inspect(value)), null); // PBError class necessary?
         }
 
         try {

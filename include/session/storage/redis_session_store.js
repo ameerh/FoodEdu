@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015  PencilBlue, LLC
+    Copyright (C) 2016  PencilBlue, LLC
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('../../util.js');
@@ -29,7 +30,7 @@ module.exports = function RedisSessionStoreModule(pb) {
      * @class RedisSessionStore
      * @constructor
      */
-    function RedisSessionStore(){};
+    function RedisSessionStore(){}
 
     /**
      * The prefix to prepend to the session ID in order to construct a cache key
@@ -89,7 +90,7 @@ module.exports = function RedisSessionStoreModule(pb) {
         var sid = RedisSessionStore.getSessionKey(sessionId);
         pb.cache.del(sid, cb);
     };
-    
+
     /**
      * Repsonsible for ensuring that the mechanism that expires sessions becomes
      * active.
@@ -100,7 +101,7 @@ module.exports = function RedisSessionStoreModule(pb) {
         pb.log.debug("RedisSessionStore: Initialized");
         cb(null, true);
     };
-    
+
     /**
      * Responsable for shutting down the session store and any resources used for
      * reaping expired sessions.
@@ -122,6 +123,6 @@ module.exports = function RedisSessionStoreModule(pb) {
     RedisSessionStore.getSessionKey = function(sessionId){
         return RedisSessionStore.SESSION_KEY_PREFIX + sessionId;
     };
-    
+
     return RedisSessionStore;
 };

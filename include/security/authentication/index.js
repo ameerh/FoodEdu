@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015  PencilBlue, LLC
+	Copyright (C) 2016  PencilBlue, LLC
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -14,19 +14,21 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict';
 
 //dependencies
 var util = require('../../util.js');
+var RegExpUtils = require('../../utils/reg_exp_utils');
 
 module.exports = function AuthenticationModule(pb) {
-    
+
     /**
      *
      * @class UsernamePasswordAuthentication
      * @constructor
      */
     function UsernamePasswordAuthentication() {}
-    
+
     /**
      *
      * @method authenticate
@@ -41,14 +43,15 @@ module.exports = function AuthenticationModule(pb) {
         }
 
         //build query
+        var usernameSearchExp = RegExpUtils.getCaseInsensitiveExact(credentials.username);
         var query = {
             object_type : 'user',
             '$or' : [
                 {
-                    username : credentials.username
+                    username : usernameSearchExp
                 },
                 {
-                    email : credentials.username
+                    email : usernameSearchExp
                 }
             ],
             password : credentials.password
@@ -62,7 +65,7 @@ module.exports = function AuthenticationModule(pb) {
         }
 
         var dao;
-        if (credentials.hasOwnProperty('site')) {
+        if (credentials.site) {
             dao = new pb.SiteQueryService({site: credentials.site, onlyThisSite: false});
         } else {
             dao = new pb.DAO();
@@ -79,7 +82,7 @@ module.exports = function AuthenticationModule(pb) {
      */
     function FormAuthentication() {}
     util.inherits(FormAuthentication, UsernamePasswordAuthentication);
-    
+
     /**
      * @method authenticate
      * @param {Object} postObj
@@ -92,9 +95,10 @@ module.exports = function AuthenticationModule(pb) {
             return cb(new Error("FormAuthentication: The postObj parameter must be an object: "+postObj), null);
         }
 
-        //call the parent function
-        var userDocument = pb.DocumentCreator.create('user', postObj);
-        FormAuthentication.super_.prototype.authenticate.apply(this, [userDocument, cb]);
+        if (postObj.password) {
+            postObj.password = pb.security.encrypt(postObj.password);
+        }
+        FormAuthentication.super_.prototype.authenticate.apply(this, [postObj, cb]);
     };
 
     /**

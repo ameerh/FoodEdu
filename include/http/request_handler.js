@@ -67,11 +67,18 @@ module.exports = function RequestHandlerModule(pb) {
          * @type {Response}
          */
         this.resp = resp;
-
+        var url_split = req.url.split('/');
+        var public_dir = ['js', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components','api', 'public', 'actions', 'media'];
+    
+        if( req.url.length > 1 && url_split[1] !== 'page' && url_split[1] !== 'admin' && public_dir.indexOf(url_split[1]) === -1 ){
+            return this.doRedirect('/page/'+url_split[url_split.length - 1], 301);
+        }
         /**
          * @property url
          * @type {Url}
          */
+
+        
         this.url       = url.parse(req.url, true);
 
         /**
@@ -809,11 +816,7 @@ module.exports = function RequestHandlerModule(pb) {
      * @param {Object} session The session for the requesting entity
      */
     RequestHandler.prototype.onSessionRetrieved = function(err, session) {
-        if (pb.log.isSilly()) {
-            pb.log.silly("RequestHandler: Ameer here");
-        }
-
-
+        console.log("in session");
         if (err) {
             this.onErrorOccurred(err);
             return;
@@ -837,52 +840,6 @@ module.exports = function RequestHandlerModule(pb) {
         this.localizationService = this.deriveLocalization({session: session});
 
         //make sure we have a site
-        if (!siteObj) {
-            var error = new Error("The host (" + hostname + ") has not been registered with a site. In single site mode, you must use your site root (" + pb.config.siteRoot + ").");
-            pb.log.error(error);
-            return this.serveError(error);
-        }
-
-        this.site = this.siteObj.uid;
-        this.siteName = this.siteObj.displayName;
-        //find the controller to hand off to
-        var route = this.getRoute(this.url.pathname);
-        if (route == null) {
-
-            if (pb.log.isSilly()) {
-                pb.log.silly("RequestHandler: Ameer here");
-            }
-            // if prefix 'page' not exist
-            var split_url = this.url.pathname.split('/');
-            if (split_url[1] != 'page') {
-                return this.doRedirect('/page/' + split_url[split_url.length - 1], 301);
-            }
-
-            // check if hierarchy exist or not
-            if (split_url.length > 3) {
-                //redirect on new url using 301 redirect.
-                if (split_url[split_url.length - 1] != '') {
-                    var new_url = '/page/' + split_url[split_url.length - 1];
-                    return this.doRedirect(new_url, 301);
-                }
-                else {
-                    var new_url = '/page/' + split_url[split_url.length - 2];
-                    return this.doRedirect(new_url, 301);
-                }
-            }
-            else {
-                return this.serve404();
-            }
-        }
-        else {
-            if (route.path == ':locale') {
-                var split_url = this.url.pathname.split('/');
-                if (split_url[1] != 'page') {
-                    return this.doRedirect('/page/' + split_url[split_url.length - 1], 301);
-                }
-            }
-        }
-
 
         this.route = route;
 
@@ -1057,6 +1014,7 @@ module.exports = function RequestHandlerModule(pb) {
             var inactiveSiteAccess = route.themes[rt.site][rt.theme][rt.method].inactive_site_access;
             if (!self.siteObj.active && !inactiveSiteAccess) {
                 if (self.siteObj.uid === pb.SiteService.GLOBAL_SITE) {
+                    console.log("call doRedirect");
                     return self.doRedirect('/admin');
                 }
                 else {

@@ -69,7 +69,11 @@ module.exports = function RequestHandlerModule(pb) {
         this.resp = resp;
         var url_split = req.url.split('/');
         var public_dir = ['js', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components','api', 'public', 'actions', 'media'];
-    
+        
+        if( req.url.length <= 1){
+            return this.doRedirect('/page/home', 301);
+        }
+
         if( req.url.length > 1 && url_split[1] !== 'page' && url_split[1] !== 'admin' && public_dir.indexOf(url_split[1]) === -1 ){
             return this.doRedirect('/page/'+url_split[url_split.length - 1], 301);
         }

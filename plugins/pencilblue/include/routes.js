@@ -552,6 +552,12 @@ module.exports = function Routes(pb){
         },
         {
             method: 'get',
+            path: "/page/home",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'home.js'),
+            content_type: 'text/html'
+        },
+        {
+            method: 'get',
             path: "/admin/content/pages/new",
             access_level: pb.SecurityService.ACCESS_EDITOR,
             auth_required: true,

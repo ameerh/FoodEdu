@@ -27,8 +27,8 @@
 
 #fpi-buttons {
     position:absolute;
-    top:155px;
-    left:100px;
+    top:35%;
+    left:35%;
 }
 
 #fpi-buttons a{
@@ -69,6 +69,7 @@ a#lateral-button {
     width:104px;
     height:104px;
     display:block;
+    margin-top: 20px;
 }
 
 a:hover#lateral-button {
@@ -82,6 +83,7 @@ a#medial-button {
     width:104px;
     height:104px;
     display:block;
+    margin-top: 20px;
 }
 
 a:hover#medial-button {

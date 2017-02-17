@@ -64,12 +64,12 @@ a:hover
 #no_articles
 {
     font-size: 1.25em;
-    text-align: center;
 }
 
 .article
 {
     font-size: 1.125em;
+    width: 100%;
 }
 
 .article h1

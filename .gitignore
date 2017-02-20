@@ -9,6 +9,8 @@ log/
 coverage/
 out
 plugins/*
+!plugins/contact-pencilblue
+!plugins/contact-pencilblue/**
 !plugins/pencilblue
 !plugins/pencilblue/**
 !plugins/footeducation

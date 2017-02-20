@@ -552,7 +552,7 @@ module.exports = function Routes(pb){
         },
         {
             method: 'get',
-            path: "/page/contact",
+            path: "/page/feedback",
             controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'contact.js'),
             content_type: 'text/html'
         },

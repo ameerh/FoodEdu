@@ -46,6 +46,12 @@ a:hover
     text-transform: capitalize;
 }
 
+.navbar-toggle
+{
+    margin-right: 48% !important;
+    border-color: transparent !important;
+}
+
 .navbar-default .navbar-nav>li>a:hover {
     color: #fff;
 }

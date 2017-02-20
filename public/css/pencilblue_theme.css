@@ -96,10 +96,16 @@ a:hover
     overflow: hidden;
 }
 
-.byline .media-body
+.byline
 {
     margin: 0;
     padding: .5em;
+    height: 5em;
+}
+.media-body
+{
+    margin: 0;
+    padding: 20px;
     height: 5em;
 }
 

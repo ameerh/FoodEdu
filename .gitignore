@@ -15,8 +15,7 @@ plugins/*
 !plugins/pencilblue/**
 !plugins/footeducation
 !plugins/footeducation/**
-!plugins/adsense-pencilblue
-!plugins/adsense-pencilblue/**
+
 !plugins/ga
 !plugins/ga/**
 !plugins/portfolio

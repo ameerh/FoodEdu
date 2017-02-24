@@ -26,6 +26,17 @@ a:hover
     outline: none;
 }
 
+.search-bar {
+    float:right;
+    width:350px;
+    margin-top: 50px;
+}
+
+.cse .gsc-search-button input.gsc-search-button-v2, input.gsc-search-button-v2{
+
+    display: none !important;
+}
+
 /* NAVBAR */
 
 .black_75 {
@@ -433,6 +444,10 @@ p{
     height: 270px;
     max-height: 270px;
 }
+.icon-detail-card
+{
+    background-color: #fff;
+}
 .more-detail-content
 {
     padding-left: 3em;
@@ -440,7 +455,7 @@ p{
 }
 .set-more-link-heading
 {
-    margin-top: 2.5em !important;
+    margin-top: 1.5em !important;
 }
 .meet-editors-button
 {

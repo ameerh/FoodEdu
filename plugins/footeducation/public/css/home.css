@@ -302,7 +302,7 @@ p.ism-badge a.ism-link:hover {
 /* SLIDER */
 
 #my-slider {
-    width: 600px;
+    width: 100%;
     -webkit-border-radius: 5px; border-radius: 5px; 
 }
 

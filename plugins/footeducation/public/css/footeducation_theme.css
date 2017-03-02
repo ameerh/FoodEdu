@@ -246,7 +246,7 @@ footer {
 /*// Logo responsiveness */
 @media (max-width: 400px) {
     .footeducation-logo {
-        width: 130px !important;
+        width: 260px !important;
     }
 }
 
@@ -293,7 +293,7 @@ footer {
     }
 
     .hero_callouts h3 {
-        font-size: 1.75;
+        font-size: 1.75px;
     }
 
     .container.standalone {
@@ -486,11 +486,11 @@ p{
     height:430px;
     min-height: 430px;
     max-height: 430px;
-    .article h1
-    {
-        display: none;
-        color: white !important;
-    }
+}
+.article h1
+{
+    display: none;
+    color: white !important;
 }
 
 

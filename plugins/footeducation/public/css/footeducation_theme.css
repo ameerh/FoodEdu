@@ -2,7 +2,7 @@
 
 body, html {
     font-family: "Open Sans", sans-serif;
-    font-size: 17px;
+    font-size: 17.5px;
 }
 
 *
@@ -14,7 +14,7 @@ body, html {
 
 a
 {
-    color: darkblue;
+    color: #1e73be;
     text-decoration: none;
     outline: none;
 }

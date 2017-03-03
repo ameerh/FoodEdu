@@ -11,6 +11,9 @@
     <label for="pb_contact_comment">^loc_generic.COMMENT^</label>
     <textarea id="pb_contact_comment" name="pb_contact_comment" class="form-control" style="min-height: 100px"></textarea>
   </div>
+
+  <input type="text" name="captcha" class="captcha" maxlength="6" size="6" placeholder="Enter captcha code" tabindex=3 />
+
   <button type="submit" id="pb_contact_submit" class="btn btn-primary" onclick="submitPBContact()">
     <span id="pb_contact_spinner" style="display: none">
       <i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;

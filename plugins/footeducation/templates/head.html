@@ -30,6 +30,15 @@
     <script type="text/javascript" src="^angular_sanitize_src^"></script>
     <script type="text/javascript" src="/js/media.js"></script>
 
+    <!--Menu Items Clickable Code-->
+
+    <script>
+        $(document).ready(function(){
+            $("a:contains('Surgical Procedures')").attr('href', '/page/surgical-procedures');
+            $("a:contains('Foot and Ankle Basics')").attr('href', '/page/foot-and-ankle-basics');
+            $("a:contains('Foot And Ankle Conditions')").attr('href', '/page/foot-and-ankle-conditions');
+        });
+    </script>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="/public/footeducation/js/fpi.js"></script>

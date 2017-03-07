@@ -165,6 +165,11 @@ a:hover
     margin-top: 0;
 }
 
+h2{
+    font-weight: 300;
+    font-size: 30px;
+}
+
 .byline
 {
     float: left;
@@ -317,7 +322,7 @@ footer {
     background-color: #ffffff;
     margin: 0px !important;
     padding: 50px;
-   
+
 }
 .footeducation-menu
 {
@@ -432,7 +437,7 @@ p{
 }
 .footer-link-color
 {
-    color: #1e73be;;
+    color: #1e73be;
 }
 
 /*// side card with more detail*/
@@ -489,8 +494,7 @@ p{
 }
 .article h1
 {
-    display: none;
-    color: white !important;
+    color: #1e73be !important;
 }
 
 

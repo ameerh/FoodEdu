@@ -15,6 +15,11 @@
     display:none;
 }
 
+b{
+    color: #1e73be !important;
+    font-weight: 300;
+}
+
 #fpi-header {
     width:640px;
     height:73px;
@@ -28,7 +33,7 @@
 #fpi-buttons {
     position:absolute;
     top: 20%;
-    left: 16%; 
+    left: 16%;
 }
 
 #fpi-buttons a{

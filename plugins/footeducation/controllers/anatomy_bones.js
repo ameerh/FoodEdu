@@ -1,3 +1,8 @@
+/**
+ * Created by macbookpro on 3/8/17.
+ */
+
+
 /*
  Copyright (C) 2015  PencilBlue, LLC
 
@@ -19,7 +24,7 @@
 var path  = require('path');
 var async = require('async');
 
-module.exports = function AnatomyModule(pb) {
+module.exports = function AnatomyBonesModule(pb) {
 
     //pb dependencies
     var util           = pb.util;
@@ -28,16 +33,16 @@ module.exports = function AnatomyModule(pb) {
     var ArticleService = pb.ArticleService;
 
     /**
-     * Anatomy page of the pencilblue theme
+     * AnatomyBones page of the pencilblue theme
      * @deprecated Since 0.4.1
-     * @class Anatomy
+     * @class AnatomyBones
      * @constructor
      * @extends BaseController
      */
-    function Anatomy(){}
-    util.inherits(Anatomy, pb.BaseController);
+    function AnatomyBones(){}
+    util.inherits(AnatomyBones, pb.BaseController);
 
-    Anatomy.prototype.init = function (props, cb) {
+    AnatomyBones.prototype.init = function (props, cb) {
         var self = this;
 
         pb.BaseController.prototype.init.call(self, props, function () {
@@ -46,7 +51,7 @@ module.exports = function AnatomyModule(pb) {
         });
     };
 
-    Anatomy.prototype.render = function(cb)
+    AnatomyBones.prototype.render = function(cb)
     {
         var self = this;
 
@@ -133,7 +138,7 @@ module.exports = function AnatomyModule(pb) {
     };
 
 
-    Anatomy.prototype.getTemplate = function(content, cb) {
+    AnatomyBones.prototype.getTemplate = function(content, cb) {
 
         //check if we should just use whatever default there is.
         //this could fall back to an active theme or the default pencilblue theme.
@@ -150,7 +155,7 @@ module.exports = function AnatomyModule(pb) {
         var uidAndTemplate = content.template;
 
         //when no template is specified or is empty we no that the article has no
-        //preference and we can fall back on the default (anatomy).  We depend on the
+        //preference and we can fall back on the default (anatomy_bones).  We depend on the
         //template service to determine who has priority based on the active theme
         //then defaulting back to pencilblue.
         if (!pb.validation.validateNonEmptyStr(uidAndTemplate, true)) {
@@ -166,7 +171,7 @@ module.exports = function AnatomyModule(pb) {
 
         //for backward compatibility we let the template service determine where to
         //find the template when no template is specified.  This mostly catches the
-        //default case of "anatomy"
+        //default case of "anatomy_bones"
         if (pieces.length === 1) {
 
             pb.log.silly("ContentController: No theme specified, Template Service will delegate [%s]", pieces[0]);
@@ -196,12 +201,12 @@ module.exports = function AnatomyModule(pb) {
         cb(null, pieces[1]);
     };
 
-    Anatomy.prototype.getDefaultTemplatePath = function() {
-        return 'anatomy';
+    AnatomyBones.prototype.getDefaultTemplatePath = function() {
+        return 'anatomy_bones';
     };
 
 
-    Anatomy.prototype.gatherData = function(cb) {
+    AnatomyBones.prototype.gatherData = function(cb) {
         var self  = this;
         var tasks = {
 
@@ -230,7 +235,7 @@ module.exports = function AnatomyModule(pb) {
         async.parallel(tasks, cb);
     };
 
-    Anatomy.prototype.loadContent = function(articleCallback) {
+    AnatomyBones.prototype.loadContent = function(articleCallback) {
 
         var section = this.req.pencilblue_section || null;
         var topic   = this.req.pencilblue_topic   || null;
@@ -273,7 +278,7 @@ module.exports = function AnatomyModule(pb) {
         }
     };
 
-    Anatomy.prototype.renderContent = function(content, contentSettings, themeSettings, anatomy, cb) {
+    AnatomyBones.prototype.renderContent = function(content, contentSettings, themeSettings, anatomy_bones, cb) {
         var self = this;
 
         var isPage           = content.object_type === 'page';
@@ -290,7 +295,7 @@ module.exports = function AnatomyModule(pb) {
         ats.registerLocal('article_subheading', content.subheading ? content.subheading : '');
         ats.registerLocal('article_subheading_display', content.subheading ? '' : 'display:none;');
         ats.registerLocal('article_id', content[pb.DAO.getIdField()].toString());
-        ats.registerLocal('article_anatomy', anatomy);
+        ats.registerLocal('article_anatomy_bones', anatomy_bones);
         ats.registerLocal('article_timestamp', showTimestamp && content.timestamp ? content.timestamp : '');
         ats.registerLocal('article_timestamp_display', showTimestamp ? '' : 'display:none;');
         ats.registerLocal('article_layout', new pb.TemplateValue(content.layout, false));
@@ -313,7 +318,7 @@ module.exports = function AnatomyModule(pb) {
         ats.load('elements/article', cb);
     };
 
-    Anatomy.prototype.renderComments = function(content, ts, cb) {
+    AnatomyBones.prototype.renderComments = function(content, ts, cb) {
         var self           = this;
         var commentingUser = null;
         if(pb.security.isAuthenticated(this.session)) {
@@ -358,7 +363,7 @@ module.exports = function AnatomyModule(pb) {
         ts.load('elements/comments', cb);
     };
 
-    Anatomy.prototype.renderComment = function(comment, cb) {
+    AnatomyBones.prototype.renderComment = function(comment, cb) {
 
         var cts = this.ts.getChildInstance();
         cts.reprocess = false;
@@ -371,7 +376,7 @@ module.exports = function AnatomyModule(pb) {
         cts.load('elements/comments/comment', cb);
     };
 
-    Anatomy.prototype.getContentSpecificPageName = function(content, cb) {
+    AnatomyBones.prototype.getContentSpecificPageName = function(content, cb) {
         if (!content) {
             cb(null, pb.config.siteName);
             return;
@@ -398,7 +403,7 @@ module.exports = function AnatomyModule(pb) {
         }
     };
 
-    Anatomy.prototype.getNavigation = function(cb) {
+    AnatomyBones.prototype.getNavigation = function(cb) {
         var options = {
             currUrl: this.req.url,
             site: this.site,
@@ -410,7 +415,7 @@ module.exports = function AnatomyModule(pb) {
         var menuService = new pb.TopMenuService();
         menuService.getNavItems(options, function(err, navItems) {
             if (util.isError(err)) {
-                pb.log.error('Anatomy: %s', err.stack);
+                pb.log.error('AnatomyBones: %s', err.stack);
             }
             cb(navItems.themeSettings, navItems.navigation, navItems.accountButtons);
         });
@@ -430,7 +435,7 @@ module.exports = function AnatomyModule(pb) {
      *
      * @param cb A callback of the form: cb(error, array of objects)
      */
-    Anatomy.getRoutes = function(cb) {
+    AnatomyBones.getRoutes = function(cb) {
         var routes = [
             {
                 method: 'get',
@@ -443,5 +448,5 @@ module.exports = function AnatomyModule(pb) {
     };
 
     //exports
-    return Anatomy;
+    return AnatomyBones;
 };

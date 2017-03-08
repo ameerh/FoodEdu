@@ -552,8 +552,8 @@ module.exports = function Routes(pb){
         },
         {
             method: 'get',
-            path: "/page/anatomy",
-            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy.js'),
+            path: "/page/bones-of-foot-and-ankle",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy_bones.js'),
             content_type: 'text/html'
         },
         {

@@ -13,8 +13,11 @@
 }
 
 b{
-    color: #1e73be !important;
+    color: black !important;
     font-weight: 300;
+}
+h1{
+    margin-top: -10px !important;
 }
 
 #anatomy-bones-header {
@@ -229,6 +232,3 @@ a:hover#anatomy-medial-button-small {
     font-size:14px;
     padding-top:10px;
 }
-
-
-

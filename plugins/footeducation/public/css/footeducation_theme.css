@@ -32,6 +32,7 @@ a:hover
     margin-top: 50px;
 }
 
+
 .cse .gsc-search-button input.gsc-search-button-v2, input.gsc-search-button-v2{
 
     display: none !important;
@@ -496,7 +497,6 @@ p{
 {
     color: #1e73be !important;
 }
-
 
 /*// open dropdown on hover*/
 

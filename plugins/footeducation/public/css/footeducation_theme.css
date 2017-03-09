@@ -1,8 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
 
 body, html {
-    font-family: "Open Sans", sans-serif;
-    font-size: 17.5px;
+    font-family: "Open Sans", sans-serif !important;
+    font-size: 17.5px !important;
+    font-weight: 300 !important;
 }
 
 *
@@ -271,7 +272,6 @@ footer {
     .navbar {
         position: absolute;
         width: 100%;
-        z-index: 10000;
     }
     .dropdown-menu>li>a {
         text-align: left;

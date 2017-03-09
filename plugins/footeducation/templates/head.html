@@ -40,7 +40,19 @@
             $("a:contains('Surgical Procedures')").attr('href', '/page/surgical-procedures');
             $("a:contains('Foot and Ankle Basics')").attr('href', '/page/foot-and-ankle-basics');
             $("a:contains('Foot And Ankle Conditions')").attr('href', '/page/foot-and-ankle-conditions');
-            $('h1:first').find('a').removeAttr('href').css('color', 'black');
+            $('h1:first').find('a').removeAttr('href').css(
+                {
+                    "font-weight":"300",
+                    "font-family":"\"Open Sans\", sans-serif",
+                    "color":"black",
+                    "line-height":"1.2em",
+                    "font-size":"40px",
+                    "font-family":"\"Open Sans\", sans-serif"
+                });
+            $("body").css({
+                "font-weight":"300",
+                "font-family":"\"Open Sans\", sans-serif"
+            });
         });
     </script>
 

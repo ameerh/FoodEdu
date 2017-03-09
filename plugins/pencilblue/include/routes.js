@@ -558,6 +558,12 @@ module.exports = function Routes(pb){
         },
         {
             method: 'get',
+            path: "/page/joints-of-foot-and-ankle",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy_joints.js'),
+            content_type: 'text/html'
+        },
+        {
+            method: 'get',
             path: "/page/feedback",
             controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'contact.js'),
             content_type: 'text/html'

@@ -244,7 +244,7 @@ h2{
 
 footer {
     width: 100%;
-    margin: 40px 0;
+    margin-top: 20px;
     font-size: .8em;
     text-align: center;
 }
@@ -315,6 +315,7 @@ footer {
 .footeducation-footer
 {
     background-color: #000000 !important;
+    margin: 0px;
     line-height: 3.428571 !important;
 }
 
@@ -334,6 +335,7 @@ footer {
 .footeducation-body
 {
     background-color: #efefef;
+    min-height: 100vh;
 }
 .footeducation-upper-add-bloack
 {

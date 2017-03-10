@@ -244,7 +244,7 @@ h2{
 
 footer {
     width: 100%;
-    margin: 2em 0;
+    margin: 40px 0;
     font-size: .8em;
     text-align: center;
 }
@@ -272,6 +272,7 @@ footer {
     .navbar {
         position: absolute;
         width: 100%;
+        z-index: 10000;
     }
     .dropdown-menu>li>a {
         text-align: left;
@@ -314,7 +315,6 @@ footer {
 .footeducation-footer
 {
     background-color: #000000 !important;
-    margin: 0px;
     line-height: 3.428571 !important;
 }
 
@@ -405,10 +405,15 @@ footer {
 
 /*// link color*/
 
+.dropdown-menu>.active>a{
+    background-color: #277a58 !important ;
+}
+
 .link-color
 {
     color:#1e73be;
     text-decoration: none;
+    font-size: 16px;
 }
 /*// paragraph margin nulll*/
 
@@ -461,7 +466,7 @@ p{
 }
 .set-more-link-heading
 {
-    margin-top: 1.5em !important;
+    margin-top: 2.5em !important;
 }
 .meet-editors-button
 {

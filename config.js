@@ -29,12 +29,6 @@ module.exports = {
         "writeConcern": 1,
         query_logging: false
     },
-    "server": {
-        "ssl": {
-            "enabled": true,
-            "use_x_forwarded_for": true
-        }
-    },
     "cache": {
         "fake": true,
         "host": "localhost",

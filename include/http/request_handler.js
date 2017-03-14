@@ -68,8 +68,11 @@ module.exports = function RequestHandlerModule(pb) {
          */
         this.resp = resp;
         var url_split = req.url.split('/');
+
+        url_split.length >= 1 && url_split[url_split.length - 1] == ""? url_split.pop(): null; //to cater last '/'
+
         var public_dir = ['js', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components','api', 'public', 'actions', 'media'];
-        
+
         if( req.url.length <= 1){
             return this.doRedirect('/page/home', 301);
         }
@@ -82,7 +85,7 @@ module.exports = function RequestHandlerModule(pb) {
          * @type {Url}
          */
 
-        
+
         this.url       = url.parse(req.url, true);
 
         /**

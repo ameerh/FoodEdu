@@ -272,7 +272,7 @@ footer {
     .navbar {
         position: absolute;
         width: 100%;
-        z-index: 10000;
+        z-index: 100;
     }
     .dropdown-menu>li>a {
         text-align: left;

@@ -68,6 +68,7 @@ module.exports = function RequestHandlerModule(pb) {
          */
         this.resp = resp;
         var url_split = req.url.split('/');
+        console.log(req);
 
         url_split.length >= 1 && url_split[url_split.length - 1] == ""? url_split.pop(): null; //to cater last '/'
 

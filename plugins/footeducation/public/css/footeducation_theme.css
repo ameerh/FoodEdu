@@ -108,6 +108,17 @@ a:hover
 .navbar-brand img {
     max-height: 32px;
 }
+
+.icon-bar {
+    background-color: white !important;
+}
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus{
+    background-color: #277a58;
+}
+
+
+
 .logo{
     margin:8px;
 }

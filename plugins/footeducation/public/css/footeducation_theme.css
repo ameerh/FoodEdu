@@ -61,7 +61,7 @@ a:hover
 
 .navbar-toggle
 {
-    margin-right: 48% !important;
+    float: left !important;
     border-color: transparent !important;
 }
 
@@ -266,12 +266,19 @@ footer {
     .footeducation-logo {
         width: 260px !important;
     }
+    .search-bar{
+        margin-top: 0px !important;
+    }
 }
 
 @media (max-width: 767px) {
     .navbar-default .navbar-nav .open .dropdown-menu>li>a {
         color: #fff;
         background-color: #277a58 !important;
+    }
+
+    .search-bar{
+        margin-top: 0px !important;
     }
 
     .nav>li {

@@ -69,9 +69,6 @@ module.exports = function RequestHandlerModule(pb) {
         this.resp = resp;
         var url_split = req.url.split('/');
 
-        //Found http
-        //console.log(req.headers.referer.split(':')[0]);
-
         url_split.length >= 1 && url_split[url_split.length - 1] == ""? url_split.pop(): null; //to cater last '/'
 
         var public_dir = ['js', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components','api', 'public', 'actions', 'media'];

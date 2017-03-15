@@ -15,20 +15,15 @@ MongoClient.connect(url, function(err, db) {
             else {
                 async.eachLimit(pages, pages.length , function(page, callback){
 
-                    var meta_des = page.seo_title;
-
-                    var focus_key = page.seo_title.replace(/[-]/g, " ");
-
-                    focus_key = focus_key.replace(/[^a-zA-Z ]/g, "");
-
-                    var page_lay = page.page_layout.replace(/<br \/><br \/>/g, "");
+                    var page_lay = page.page_layout.replace(/http:\/\/www.footeducation.com/g, "https://www.footeducation.com");
+                    // console.log(page_lay+ '\n\n\n\n')
 
                     db.collection('page').update(
                         {
                             _id : page._id
                         },
                         {
-                            $set: {focus_keyword: focus_key, meta_desc: meta_des, page_layout : page_lay}
+                            $set: {page_layout : page_lay}
 
                         },
                         function(err){

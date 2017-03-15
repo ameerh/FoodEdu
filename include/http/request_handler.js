@@ -67,18 +67,42 @@ module.exports = function RequestHandlerModule(pb) {
          * @type {Response}
          */
         this.resp = resp;
-        var url_split = req.url.split('/');
 
-        url_split.length >= 1 && url_split[url_split.length - 1] == ""? url_split.pop(): null; //to cater last '/'
+        var isHTTP;
 
-        var public_dir = ['js', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components','api', 'public', 'actions', 'media'];
+        req.headers.referer ? isHTTP = req.headers.referer.split(':')[0] == 'http' : null ;
 
-        if( req.url.length <= 1){
-            return this.doRedirect('/page/home', 301);
+        if(!isHTTP) {
+            var url_split = req.url.split('/');
+
+            url_split.length >= 1 && url_split[url_split.length - 1] == "" ? url_split.pop() : null; //to cater last '/'
+
+            var public_dir = ['js', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components', 'api', 'public', 'actions', 'media'];
+
+            if (req.url.length <= 1) {
+                return this.doRedirect('/page/home', 301);
+            }
+
+            if (req.url.length > 1 && url_split[1] !== 'page' && url_split[1] !== 'admin' && public_dir.indexOf(url_split[1]) === -1) {
+                return this.doRedirect('/page/' + url_split[url_split.length - 1], 301);
+            }
         }
+        else{
+            var url_split = req.url.split('/');
 
-        if( req.url.length > 1 && url_split[1] !== 'page' && url_split[1] !== 'admin' && public_dir.indexOf(url_split[1]) === -1 ){
-            return this.doRedirect('/page/'+url_split[url_split.length - 1], 301);
+            url_split.length >= 1 && url_split[url_split.length - 1] == "" ? url_split.pop() : null; //to cater last '/'
+
+            var public_dir = ['js', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components', 'api', 'public', 'actions', 'media'];
+
+            if (req.url.length <= 1) {
+                return this.doRedirect('https://www.footeducation.com/page/home', 301);
+            }
+            else if (req.url.length > 1 && url_split[1] !== 'page' && url_split[1] !== 'admin' && public_dir.indexOf(url_split[1]) === -1) {
+                return this.doRedirect('https://www.footeducation.com/page/' + url_split[url_split.length - 1], 301);
+            }
+            else{
+                return this.doRedirect('https://www.footeducation.com'+ req.url);
+            }
         }
         /**
          * @property url
@@ -86,7 +110,7 @@ module.exports = function RequestHandlerModule(pb) {
          */
 
 
-        this.url       = url.parse(req.url, true);
+        this.url = url.parse(req.url, true);
 
         /**
          * The hostname (host header) of the current request. When no host

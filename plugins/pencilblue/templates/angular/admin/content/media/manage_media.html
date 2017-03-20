@@ -27,11 +27,11 @@
 			sortAsc: false,
 			sortDesc: false
 		}, {
-			name: loc.generic.LAST_MODIFIED,
-			field: 'last_modified',
-			sortAsc: true,
-			sortDesc: false
-		}];
+            name: loc.generic.LAST_MODIFIED,
+            field: 'last_modified',
+            sortAsc: true,
+            sortDesc: false
+        }];
 
 		$scope.search = function() {
 			searchService.search($scope.searchText, $scope.media, ['name'], function(media) {
@@ -70,6 +70,10 @@
 			$scope.objectToDelete = mediaItem;
 			$('#confirm_delete_modal').modal({backdrop: 'static', keyboard: true});
 		}
+
+        $scope.copyToClipboard = function (url) {
+            window.prompt("Copy link bellow.",url);
+        }
 
 		$scope.deleteObject = function() {
 			if(!$scope.objectToDelete) {

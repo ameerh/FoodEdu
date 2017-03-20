@@ -67,6 +67,7 @@ module.exports = function RequestHandlerModule(pb) {
          * @type {Response}
          */
         this.resp = resp;
+
         var url_split = req.url.split('/');
 
         url_split.length >= 1 && url_split[url_split.length - 1] == ""? url_split.pop(): null; //to cater last '/'
@@ -86,7 +87,7 @@ module.exports = function RequestHandlerModule(pb) {
          */
 
 
-        this.url       = url.parse(req.url, true);
+        this.url = url.parse(req.url, true);
 
         /**
          * The hostname (host header) of the current request. When no host

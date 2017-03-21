@@ -168,6 +168,10 @@ a:hover
     padding-top: 1em;
 }
 
+.container.foot-pain-identifier {
+    width: 100%;
+}
+
 /* ARTICLES */
 
 .article {
@@ -531,5 +535,3 @@ p{
 .dropdown:hover .dropdown-menu {
     display: block;
 }
-
-

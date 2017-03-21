@@ -1,3 +1,12 @@
+.container.foot-pain-identfier {
+  width: 100%;
+}
+
+.fpi-adsense {
+  width: 160px;
+  height:400px;
+  display: inline-block;
+}
 
 /*foot pain identifier start*/
 #foot-pain-identifier {
@@ -233,6 +242,3 @@ a:hover#medial-button-small {
     font-size:14px;
     padding-top:10px;
 }
-
-
-

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	$('#foot-pain-identifier').fadeIn(1000);
+	$('#foot-pain-identifier').css('display', 'inline-block');
 	$('#fpi-feet > div > img').hide();
 	$('#fpi-links ul').hide();
 	$('#fpi-info').hide();
@@ -15,7 +15,7 @@ $(document).ready(function() {
 		$('#fpi-feet ' + view).fadeIn();
 		return false;
 	});
-	
+
 	$('#fpi-buttons-small > a').click(function() {
 		var view = $(this).attr('href');
 		$('#fpi-info').hide();

@@ -3,21 +3,32 @@
 }
 
 .fpi-adsense {
+  display: inline-block;
+
   width: 160px;
   height:400px;
-  display: inline-block;
 }
 
 /*foot pain identifier start*/
 #foot-pain-identifier {
-    width:680px;
-    height:650px;
-    overflow:hidden;
-    background-color:#DDDFDE;
     position:relative;
+
     display:none;
-    border-radius:10px;
+    overflow:hidden;
+
+    width: 100%;
+    max-width: 680px;
+    height:650px;
+
     -moz-border-radius:10px;
+    border-radius:10px;
+    background-color:#DDDFDE;
+}
+
+@media (max-width: 767px) {
+  #foot-pain-identifier {
+    height: 1000px;
+  }
 }
 
 #backToTop {
@@ -26,15 +37,18 @@
 
 b{
     color: #1e73be !important;
+
     font-weight: 300;
 }
 
 #fpi-header {
-    width:640px;
-    height:73px;
     position:absolute;
     top:12px;
     left:19px;
+
+    width:640px;
+    height:73px;
+
     background-image:url('/public/footeducation/img/fpi-header.png');
     background-repeat:no-repeat;
 }
@@ -45,63 +59,116 @@ b{
     left: 16%;
 }
 
+@media (max-width: 767px) {
+  #fpi-buttons {
+    top: 49px;
+  }
+}
+
 #fpi-buttons a{
     float:left;
+
     margin-right:20px;
 }
 
 a#dorsal-button {
-    background-image:url('/public/footeducation/img/fpi-buttons.png');
-    background-position:0 0;
-    background-repeat:no-repeat;
-    width:217px;
-    height:217px;
     display:block;
+
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+
+    background-image:url('/public/footeducation/img/fpi-buttons.png');
+    background-repeat:no-repeat;
+    background-position:0 0;
+    background-size: 400% 200%;
 }
 
 a:hover#dorsal-button {
-    background-position:0 -217px;
+    background-position:0 100%;
+}
+
+@media (max-width: 767px) {
+  a#dorsal-button {
+    width: 30vw;
+    height: 30vw;
+  }
 }
 
 a#plantar-button {
-    background-image:url('/public/footeducation/img/fpi-buttons.png');
-    background-position:-217px 0;
-    background-repeat:no-repeat;
-    width:217px;
-    height:217px;
     display:block;
+
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+
+    background-image:url('/public/footeducation/img/fpi-buttons.png');
+    background-repeat:no-repeat;
+    background-position:33.3% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#plantar-button {
-    background-position:-217px -217px;
+    background-position:33.3% 100%;
+}
+
+@media (max-width: 767px) {
+  a#plantar-button {
+    width: 30vw;
+    height: 30vw;
+  }
 }
 
 a#lateral-button {
-    background-image:url('/public/footeducation/img/fpi-buttons.png');
-    background-position:-434px 0;
-    background-repeat:no-repeat;
-    width:217px;
-    height:217px;
     display:block;
-    margin-top: 20px;
+
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+
+    background-image:url('/public/footeducation/img/fpi-buttons.png');
+    background-repeat:no-repeat;
+    background-position:66.6% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#lateral-button {
-    background-position:-434px -217px;
+    background-position:66.6% 100%;
+}
+
+@media (max-width: 767px) {
+  a#lateral-button {
+    width: 30vw;
+    height: 30vw;
+  }
 }
 
 a#medial-button {
-    background-image:url('/public/footeducation/img/fpi-buttons.png');
-    background-position:-651px 0;
-    background-repeat:no-repeat;
-    width:217px;
-    height:217px;
     display:block;
-    margin-top: 20px;
+
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+
+    background-image:url('/public/footeducation/img/fpi-buttons.png');
+    background-repeat:no-repeat;
+    background-position:100% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#medial-button {
-    background-position:-651px -217px;
+    background-position:100% 100%;
+}
+
+@media (max-width: 767px) {
+  a#medial-button {
+    width: 30vw;
+    height: 30vw;
+  }
 }
 
 #fpi-feet {
@@ -112,8 +179,14 @@ a:hover#medial-button {
 
 #dorsal-image {
     position:absolute;
-    top:0;
+    top:10px;
     left:136px;
+}
+
+@media (max-width: 767px) {
+  #dorsal-image {
+    left:62px;
+  }
 }
 
 #plantar-image {
@@ -122,10 +195,22 @@ a:hover#medial-button {
     left:104px;
 }
 
+@media (max-width: 767px) {
+  #plantar-image {
+    left:62px;
+  }
+}
+
 #medial-image {
     position:absolute;
     top:93px;
     left:0;
+}
+
+@media (max-width: 767px) {
+  #medial-image {
+    left: -35px;
+  }
 }
 
 #lateral-image {
@@ -134,11 +219,27 @@ a:hover#medial-button {
     left:0px;
 }
 
+@media (max-width: 767px) {
+  #lateral-image {
+    left: -35px;
+  }
+}
+
 #fpi-links {
-    width:260px;
     position:absolute;
     top:100px;
     left:394px;
+
+    width:260px;
+}
+
+@media (max-width: 767px) {
+  #fpi-links {
+    top: 600px;
+    left: 20px;
+
+    width: 260px;
+  }
 }
 
 #fpi-buttons-small {
@@ -147,18 +248,28 @@ a:hover#medial-button {
     left:463px;
 }
 
+@media (max-width: 767px) {
+  #fpi-buttons-small {
+    top: 10px;
+    left: 18px;
+  }
+}
+
 #fpi-buttons-small a{
     float:left;
+
     margin-right:10px;
 }
 
 a#dorsal-button-small {
-    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
-    background-position:0 0;
-    background-repeat:no-repeat;
+    display:block;
+
     width:43px;
     height:43px;
-    display:block;
+
+    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
+    background-repeat:no-repeat;
+    background-position:0 0;
 }
 
 a:hover#dorsal-button-small {
@@ -166,12 +277,14 @@ a:hover#dorsal-button-small {
 }
 
 a#plantar-button-small {
-    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
-    background-position:-43px 0;
-    background-repeat:no-repeat;
+    display:block;
+
     width:43px;
     height:43px;
-    display:block;
+
+    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
+    background-repeat:no-repeat;
+    background-position:-43px 0;
 }
 
 a:hover#plantar-button-small {
@@ -179,12 +292,14 @@ a:hover#plantar-button-small {
 }
 
 a#lateral-button-small {
-    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
-    background-position:-86px 0;
-    background-repeat:no-repeat;
+    display:block;
+
     width:43px;
     height:43px;
-    display:block;
+
+    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
+    background-repeat:no-repeat;
+    background-position:-86px 0;
 }
 
 a:hover#lateral-button-small {
@@ -192,12 +307,14 @@ a:hover#lateral-button-small {
 }
 
 a#medial-button-small {
-    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
-    background-position:-129px 0;
-    background-repeat:no-repeat;
+    display:block;
+
     width:43px;
     height:43px;
-    display:block;
+
+    background-image:url('/public/footeducation/img/fpi-buttons-small.png');
+    background-repeat:no-repeat;
+    background-position:-129px 0;
 }
 
 a:hover#medial-button-small {
@@ -206,29 +323,35 @@ a:hover#medial-button-small {
 
 #fpi-footer {
     position:absolute;
-    bottom:5px;
     right:10px;
+    bottom:5px;
 }
 
 #fpi-footer p {
-    font-size:12px;
     margin:0;
     padding:0;
-    color:gray;
+
     cursor:default;
+
+    color:gray;
+
+    font-size:12px;
 }
 
 #foot-pain-identifier  p{
     margin:0;
     padding:0;
+
     font-size:12px;
     font-style:italic;
 }
 
 #foot-pain-identifier  ul{
+    z-index:999;
+
     margin:0;
     padding:0;
-    z-index:999;
+
     list-style:none;
 }
 
@@ -238,7 +361,8 @@ a:hover#medial-button-small {
 }
 
 #foot-pain-identifier .fpi-chronic, #foot-pain-identifier .fpi-acute {
-    font-weight:bold;
-    font-size:14px;
     padding-top:10px;
+
+    font-size:14px;
+    font-weight:bold;
 }

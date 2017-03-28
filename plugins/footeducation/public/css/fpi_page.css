@@ -16,8 +16,7 @@
     display:none;
     overflow:hidden;
 
-    width: 100%;
-    max-width: 680px;
+    width: 680px;
     height:650px;
 
     -moz-border-radius:10px;
@@ -27,7 +26,8 @@
 
 @media (max-width: 767px) {
   #foot-pain-identifier {
-    height: 1000px;
+    width: 100%;
+    height: 1500px;
   }
 }
 
@@ -36,12 +36,15 @@
 }
 
 #backToTop a {
+  padding: 10px;
+
+  text-transform: uppercase;
+
   color: #fff;
   border-width: 0px !important;
   background-color: #428bca;
-  padding: 10px;
+
   font-style: normal;
-  text-transform: uppercase;
   line-height: 44px;
 }
 

@@ -65,7 +65,8 @@ $(document).ready(function() {
 			$('#fpi-info').show();
 			$('#fpi-links #' + location).show();
 			$('#backToTop').show();
-			$("body,html,document").delay(400).animate({scrollTop: fpi + 410}, 'slow')
+			var backToTop = $('#backToTop').offset().top;
+			$("body,html,document").delay(400).animate({scrollTop: backToTop - 10}, 'slow')
 			return false;
 		} else {
 			var location = $(this).attr('alt');

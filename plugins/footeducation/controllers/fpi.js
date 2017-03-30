@@ -64,7 +64,7 @@ module.exports = function fpiModule(pb) {
                 var articleService = new pb.ArticleService(self.site, true);
                 articleService.getMetaInfo(data.content[0], function(err, meta) {
                     self.ts.registerLocal('meta_keywords', meta.keywords);
-                    self.ts.registerLocal('meta_desc', data.section.description || meta.description);
+                    self.ts.registerLocal('meta_desc', 'Foot Pain Identifier');
                     self.ts.registerLocal('meta_title', data.section.name || meta.title);
                     self.ts.registerLocal('meta_thumbnail', meta.thumbnail);
                     self.ts.registerLocal('meta_lang', self.ls.language);

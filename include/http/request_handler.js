@@ -72,7 +72,7 @@ module.exports = function RequestHandlerModule(pb) {
 
         url_split.length >= 1 && url_split[url_split.length - 1] == ""? url_split.pop(): null; //to cater last '/'
 
-        var public_dir = ['js', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components','article','api', 'public', 'actions', 'media'];
+        var public_dir = ['js', 'sitemap', 'css', 'fonts', 'img', 'localization', 'favicon.ico', 'docs', 'bower_components','article','api', 'public', 'actions', 'media'];
 
         if( req.url.length <= 1){
             return this.doRedirect('/page/home', 301);

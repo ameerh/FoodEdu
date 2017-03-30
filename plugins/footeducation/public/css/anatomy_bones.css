@@ -20,6 +20,26 @@ h1{
     margin-top: -10px !important;
 }
 
+#anatomy-bones {
+
+    position:relative;
+    display:none;
+    overflow:hidden;
+    width: 100%;
+    max-width: 680px;
+    height:650px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+    background-color:#DDDFDE;
+}
+
+@media (max-width: 767px) {
+    #anatomy-bones {
+        height: 1000px;
+    }
+}
+
+
 #anatomy-bones-header {
     width:100%;
     height:100px;
@@ -44,56 +64,94 @@ h1{
 
 a#anatomy-dorsal-button {
     background-image:url('/public/footeducation/img/anatomy-buttons.png');
-    background-position:0 0;
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
     background-repeat:no-repeat;
-    width:219px;
-    height:217px;
-    display:block;
+    background-position:0 0;
+    background-size: 400% 200%;
 }
 
 a:hover#anatomy-dorsal-button {
-    background-position:0 -219px;
+    background-position:0 100%;
+}
+
+@media (max-width: 767px) {
+    a#anatomy-dorsal-button {
+        width: 30vw;
+        height: 30vw;
+    }
 }
 
 a#anatomy-plantar-button {
     background-image:url('/public/footeducation/img/anatomy-buttons.png');
-    background-position:-219px 0;
-    background-repeat:no-repeat;
-    width:219px;
-    height:217px;
     display:block;
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+    background-repeat:no-repeat;
+    background-position:33.3% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#anatomy-plantar-button {
-    background-position:-219px -219px;
+    background-position:33.3% 100%;
 }
+
+@media (max-width: 767px) {
+    a#anatomy-plantar-button{
+        width: 30vw;
+        height: 30vw;
+    }
+}
+
 
 a#anatomy-lateral-button {
     background-image:url('/public/footeducation/img/anatomy-buttons.png');
-    background-position:-438px 0;
-    background-repeat:no-repeat;
-    width:219px;
-    height:217px;
     display:block;
-    margin-top: 20px;
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+    background-repeat:no-repeat;
+    background-position:66.6% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#anatomy-lateral-button {
-    background-position:-438px -219px;
+    background-position:66.6% 100%;
+}
+
+@media (max-width: 767px) {
+    a#anatomy-lateral-button {
+        width: 30vw;
+        height: 30vw;
+    }
 }
 
 a#anatomy-medial-button {
     background-image:url('/public/footeducation/img/anatomy-buttons.png');
-    background-position:-657px 0;
-    background-repeat:no-repeat;
-    width:219px;
-    height:217px;
     display:block;
-    margin-top: 20px;
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+    background-repeat:no-repeat;
+    background-position:100% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#anatomy-medial-button {
-    background-position:-657px -219px;
+    background-position:100% 100%;
+}
+
+@media (max-width: 767px) {
+    a#anatomy-medial-button {
+        width: 30vw;
+        height: 30vw;
+    }
 }
 
 #anatomy-feet {

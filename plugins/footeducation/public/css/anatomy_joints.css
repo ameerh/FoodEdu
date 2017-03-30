@@ -20,6 +20,25 @@ h1{
     margin-top: -10px !important;
 }
 
+#anatomy-joints {
+
+    position:relative;
+    display:none;
+    overflow:hidden;
+    width: 100%;
+    max-width: 680px;
+    height:650px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+    background-color:#DDDFDE;
+}
+
+@media (max-width: 767px) {
+    #anatomy-joints {
+        height: 1000px;
+    }
+}
+
 #anatomy-joints-header {
     width:100%;
     height:100px;
@@ -43,59 +62,93 @@ h1{
 }
 
 a#anatomy-joints-dorsal-button {
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
     background-image:url('/public/footeducation/img/anatomy-joints-buttons.png');
-    background-position:0 0;
     background-repeat:no-repeat;
-    width:212px;
-    height:210px;
-    display:block;
+    background-position:0 0;
+    background-size: 400% 200%;
 }
 
 a:hover#anatomy-joints-dorsal-button {
-    background-position:0 -210px;
+    background-position:0 100%;
+}
+@media (max-width: 767px) {
+    a#anatomy-joints-dorsal-button {
+        width: 30vw;
+        height: 30vw;
+    }
 }
 
 a#anatomy-joints-plantar-button {
-    background-image:url('/public/footeducation/img/anatomy-joints-buttons.png');
-    background-position:-210px 0;
-    background-repeat:no-repeat;
-    width:210px;
-    height:210px;
     display:block;
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+    background-image:url('/public/footeducation/img/anatomy-joints-buttons.png');
+    background-repeat:no-repeat;
+    background-position:33.3% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#anatomy-joints-plantar-button {
-    background-position:-210px -210px;
+    background-position:33.3% 100%;
+}
+@media (max-width: 767px) {
+    a#anatomy-joints-plantar-button{
+        width: 30vw;
+        height: 30vw;
+    }
 }
 
 a#anatomy-joints-lateral-button {
     background-image:url('/public/footeducation/img/anatomy-joints-buttons.png');
-    background-position:-420px 0;
-    background-repeat:no-repeat;
-    width:212px;
-    height:210px;
     display:block;
-    margin-top: 20px;
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+    background-repeat:no-repeat;
+    background-position:66.6% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#anatomy-joints-lateral-button {
-    background-position:-420px -210px;
+    background-position:66.6% 100%;
+}
+
+@media (max-width: 767px) {
+    a#anatomy-joints-lateral-button {
+        width: 30vw;
+        height: 30vw;
+    }
 }
 
 a#anatomy-joints-medial-button {
     background-image:url('/public/footeducation/img/anatomy-joints-buttons.png');
-    background-position:-630px 0;
-    background-repeat:no-repeat;
-    width:212px;
-    height:212px;
     display:block;
-    margin-top: 20px;
+    width: 20vw;
+    max-width: 217px;
+    height: 20vw;
+    max-height: 217px;
+    background-repeat:no-repeat;
+    background-position:100% 0;
+    background-size: 400% 200%;
 }
 
 a:hover#anatomy-joints-medial-button {
-    background-position:-630px -210px;
+    background-position:100% 100%;
 }
 
+@media (max-width: 767px) {
+    a#anatomy-joints-medial-button {
+        width: 30vw;
+        height: 30vw;
+    }
+}
 #anatomy-joints-feet {
     position:absolute;
     top:90px;

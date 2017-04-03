@@ -418,6 +418,13 @@ footer {
     min-height: 100px;
     max-height: 100px;
 }
+
+.footeducation-bottom-add-block {
+    height: 100px;
+    min-height: 100px;
+    max-height: 100px;
+}
+
 .article h1, .article h2, .article h3, .article h4
 {
     margin-top: 0px !important;

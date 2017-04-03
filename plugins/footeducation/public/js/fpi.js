@@ -6,11 +6,14 @@ $(document).ready(function() {
 		$('#fpi-links ul').hide();
 		$('#fpi-info').hide();
 		$('#fpi-buttons-small > a').hide();
+		$('.fpi-instructions .step-two').hide();
+		$('.fpi-instructions.step-three').hide();
 	} else {
 		$('#foot-pain-identifier').css('display', 'inline-block');
 		$('#fpi-feet > div > img').hide();
 		$('#fpi-links ul').hide();
 		$('#fpi-info').hide();
+		$('.fpi-instructions').hide();
 		$('#fpi-buttons-small > a').hide();
 	}
 
@@ -19,6 +22,9 @@ $(document).ready(function() {
 		if ($(window).width() <= 767) {
 			var view = $(this).attr('href');
 			var fpi = $("#foot-pain-identifier").offset().top;
+			$('.fpi-instructions.step-one-two').css('top', '62px');
+			$('.fpi-instructions .step-one').hide();
+			$('.fpi-instructions .step-two').show();
 			$('#fpi-buttons').hide();
 			$('#fpi-info').hide();
 			$('#fpi-buttons-small > a').fadeIn();
@@ -62,9 +68,9 @@ $(document).ready(function() {
 			var location = $(this).attr('alt');
 			var fpi = $("#foot-pain-identifier").offset().top;
 			$('#fpi-links ul').hide();
-			$('#fpi-info').show();
 			$('#fpi-links #' + location).show();
 			$('#backToTop').show();
+			$('.fpi-instructions.step-three').show();
 			var backToTop = $('#backToTop').offset().top;
 			$("body,html,document").delay(400).animate({scrollTop: backToTop - 10}, 'slow')
 			return false;

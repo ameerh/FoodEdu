@@ -32,7 +32,7 @@ module.exports = {
         "ssl": {
             "enabled": false,
             "use_handoff_port_in_redirect": false,
-            "use_x_forwarded": false
+            "use_x_forwarded": true
         }
     },
     "cache": {

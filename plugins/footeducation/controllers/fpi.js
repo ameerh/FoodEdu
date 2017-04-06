@@ -63,6 +63,7 @@ module.exports = function fpiModule(pb) {
 
                 var articleService = new pb.ArticleService(self.site, true);
                 articleService.getMetaInfo(data.content[0], function(err, meta) {
+                    self.ts.registerLocal('page_name', 'Foot Pain Identifier - Click where it hurts');
                     self.ts.registerLocal('meta_keywords', meta.keywords);
                     self.ts.registerLocal('meta_desc', 'Do you have foot pain or ankle pain? Click on one of the pictures below and point to the area of the foot or ankle where it hurts.');
                     self.ts.registerLocal('meta_title', 'Foot Pain Identifier - Click where it hurts');
@@ -102,10 +103,7 @@ module.exports = function fpiModule(pb) {
                             cb(err, new pb.TemplateValue(result.join(''), false));
                         });
                     });
-                    self.ts.registerLocal('page_name', function(flag, cb) {
-                        var content = data.content.length > 0 ? data.content[0] : null;
-                        self.getContentSpecificPageName(content, cb);
-                    });
+
                     self.ts.registerLocal('angular', function(flag, cb) {
 
                         var objects = {

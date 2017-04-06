@@ -546,37 +546,73 @@ module.exports = function Routes(pb){
         },
         {
             method: 'get',
-            path: "/page/"+ ("foot-pain-identifier/" || "foot-pain-identifier"),
+            path: "/page/foot-pain-identifier",
             controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'fpi.js'),
             content_type: 'text/html'
         },
         {
             method: 'get',
-            path: "/page/" + ("bones-of-foot-and-ankle" || "bones-of-foot-and-ankle/"),
+            path: "/page/foot-pain-identifier/",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'fpi.js'),
+            content_type: 'text/html'
+        },
+        {
+            method: 'get',
+            path: "/page/bones-of-foot-and-ankle",
             controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy_bones.js'),
             content_type: 'text/html'
         },
         {
             method: 'get',
-            path: "/page/" + ("joints-of-foot-and-ankle" || "joints-of-foot-and-ankle/"),
+            path: "/page/bones-of-foot-and-ankle/",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy_bones.js'),
+            content_type: 'text/html'
+        },
+        {
+            method: 'get',
+            path: "/page/joints-of-foot-and-ankle",
             controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy_joints.js'),
             content_type: 'text/html'
         },
         {
             method: 'get',
-            path: "/page/" + ("ligaments-of-foot-and-ankle" || "ligaments-of-foot-and-ankle/"),
+            path: "/page/joints-of-foot-and-ankle/",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy_joints.js'),
+            content_type: 'text/html'
+        },
+        {
+            method: 'get',
+            path: "/page/ligaments-of-foot-and-ankle",
             controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy_ligaments.js'),
             content_type: 'text/html'
         },
         {
             method: 'get',
-            path: "/page/" + ("feedback" || "feedback/"),
+            path: "/page/ligaments-of-foot-and-ankle/",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'anatomy_ligaments.js'),
+            content_type: 'text/html'
+        },
+        {
+            method: 'get',
+            path: "/page/feedback",
             controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'contact.js'),
             content_type: 'text/html'
         },
         {
             method: 'get',
-            path: "/page/" + ("home" || "home/"),
+            path: "/page/feedback/",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'contact.js'),
+            content_type: 'text/html'
+        },
+        {
+            method: 'get',
+            path: "/page/home",
+            controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'home.js'),
+            content_type: 'text/html'
+        },
+        {
+            method: 'get',
+            path: "/page/home/",
             controller: path.join(pb.config.docRoot, 'plugins', 'footeducation', 'controllers', 'home.js'),
             content_type: 'text/html'
         },

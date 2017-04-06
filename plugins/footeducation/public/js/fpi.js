@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    $('.fpi-images').hide();
 	if ($(window).width() <= 767) {
 		$('#foot-pain-identifier').css('display', 'inline-block');
 		$('#fpi-header').hide();
@@ -19,6 +20,7 @@ $(document).ready(function() {
 
 
 	$('#fpi-buttons > a').click(function() {
+        $('.fpi-images').hide();
 		if ($(window).width() <= 767) {
 			var view = $(this).attr('href');
 			var fpi = $("#foot-pain-identifier").offset().top;
@@ -44,6 +46,7 @@ $(document).ready(function() {
 	});
 
 	$('#fpi-buttons-small > a').click(function() {
+        $('.fpi-images').hide();
 		if ($(window).width() <= 767) {
 			var view = $(this).attr('href');
 			$('#fpi-info').hide();
@@ -63,7 +66,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#foot-pain-identifier area').click(function() {
+	$('#foot-pain-identifier polygon').click(function() {
 		if ($(window).width() <= 767) {
 			var location = $(this).attr('alt');
 			var fpi = $("#foot-pain-identifier").offset().top;

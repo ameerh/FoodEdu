@@ -194,6 +194,63 @@ a:hover
     }
 }
 
+.container .action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    box-sizing: border-box;
+    width: 100vw;
+    height: 40px;
+
+    text-align: center;
+
+    border-top: 1px solid #d3d3d3;
+    background-color: #fff;
+}
+
+.container .action-bar a {
+    display: inline-block;
+
+    width: 25%;
+    height: 27px;
+    margin-top: 5px;
+
+    color: #fff;
+    border-radius: 25px;
+
+    font-size: 12px;
+    line-height: 27px;
+}
+
+.container .action-bar a.facebook {
+    background-color: #3b5998;
+}
+
+.container .action-bar a.twitter {
+    background-color: #1da1f2;
+}
+
+.container .action-bar a .icon {
+    position: relative;
+    top: 3px;
+
+    display: inline-block;
+
+    width: 15px;
+    height:15px;
+
+    background-size: contain;
+}
+
+.container .action-bar a.twitter .icon {
+    background-image: url('/public/footeducation/img/twitter.svg');
+}
+
+.container .action-bar a.facebook .icon {
+    background-image: url('/public/footeducation/img/facebook.svg');
+}
+
 /* ARTICLES */
 
 .article {
@@ -316,8 +373,9 @@ footer {
     }
 
     .search-bar{
-        margin-top: 0px !important;
         float: left;
+
+        margin-top: 0px !important;
         margin-left: 35px;
     }
 

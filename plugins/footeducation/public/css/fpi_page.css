@@ -51,9 +51,8 @@
   line-height: 44px;
 }
 
-b{
+h1 > b{
     color: #1e73be !important;
-
     font-weight: 300;
 }
 

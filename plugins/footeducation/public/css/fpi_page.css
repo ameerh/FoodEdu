@@ -227,7 +227,7 @@ a:hover#medial-button {
 
 @media (max-width: 767px) {
   #dorsal-image {
-    left:62px;
+    left:20px;
     top: 64px;
   }
 }

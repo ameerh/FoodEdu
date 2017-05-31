@@ -126,7 +126,10 @@ a:hover
     background-color: #277a58;
 }
 
-
+.col-lg-pull-7
+{
+    right: 56% !important;
+}
 
 .logo{
     margin:8px;

@@ -19,7 +19,7 @@
       $('#pb_contact_submit').prop('disabled', true);
       $('#pb_contact_spinner').show();
 
-      var newComment = $('#pb_contact_comment').val() + "\n_______\n" + JSON.stringify(navigator.appVersion, null, 4);
+      var newComment = $('#pb_contact_comment').val() + " ___ BROWSER SPECS : " + JSON.stringify(navigator.appVersion, null, 4);
 
       var postData = {
         name: $('#pb_contact_name').val(),

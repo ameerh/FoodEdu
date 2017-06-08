@@ -19,10 +19,12 @@
       $('#pb_contact_submit').prop('disabled', true);
       $('#pb_contact_spinner').show();
 
+      var newComment = $('#pb_contact_comment').val() + "\n_______\n" + JSON.stringify(navigator.appVersion, null, 4);
+
       var postData = {
         name: $('#pb_contact_name').val(),
         email: $('#pb_contact_email').val(),
-        comment: $('#pb_contact_comment').val()
+        comment: newComment
       }
 
       $.post('/api/contact/pb_contact_submit', JSON.stringify(postData), function(result) {

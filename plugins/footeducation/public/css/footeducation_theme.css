@@ -534,6 +534,7 @@ footer {
 .add-sense
 {
     /*background-color: #fff;*/
+    overflow: hidden;
 }
 .row
 {

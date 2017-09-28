@@ -22,7 +22,7 @@ module.exports = {
         "type":"mongo",
         "servers": [
             // "127.0.0.1:27017"
-            'mongodb://footeducation:Jan12017@ds133549-a0.mlab.com:33549'
+            'mongodb://footeducation:Jan12017@ds133549-a0.mlab.com:33549?replicaSet=rs-ds133549'
         ],
         "name": "footeducation",
         "writeConcern": 1,

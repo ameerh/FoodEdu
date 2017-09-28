@@ -11,10 +11,11 @@
 
 module.exports = {
     "siteName": "footEducation",
-     // "siteRoot": "http://localhost:8080",
-     // "sitePort": 8080,
+    //"siteRoot": "http://localhost:8080",
+    //"siteRoot": "http://footeducation-staging.us-east-1.elasticbeanstalk.com/",
+    "sitePort": process.env.PORT || '8080',
+
     "siteRoot": "https://www.footeducation.com/",
-    "sitePort": process.env.PORT,
     "logging": {
         "level": "info"
     },
@@ -27,6 +28,13 @@ module.exports = {
         "name": "footeducation",
         "writeConcern": 1,
         query_logging: false
+    },
+    "server": {
+        "ssl": {
+            "enabled": false,
+            "use_handoff_port_in_redirect": false,
+            "use_x_forwarded": false
+        }
     },
     "cache": {
         "fake": true,

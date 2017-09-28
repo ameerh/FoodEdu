@@ -13,7 +13,7 @@
     "angular-route": "~1.2.15",
     "angular-sanitize": "~1.2.15",
     "angular": "~1.2.15",
-    "jquery": "~1.11.1",
+    "jquery": "~1.12.4",
     "bootstrap": "~3.2.0",
     "fontawesome": "~4.2.0",
     "datetimepicker": "~2.2.8",

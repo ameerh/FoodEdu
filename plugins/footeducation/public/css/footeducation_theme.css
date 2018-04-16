@@ -664,3 +664,10 @@ p{
 .dropdown:hover .dropdown-menu {
     display: block;
 }
+
+.article_body p, .article_body div, .article_body ul, .article_body ol,  .article_body span {
+    font-family: "Open Sans", sans-serif !important;
+    font-size: 17.5px !important;
+    font-weight: 300 !important;
+    line-height: 1.42857143;
+}
